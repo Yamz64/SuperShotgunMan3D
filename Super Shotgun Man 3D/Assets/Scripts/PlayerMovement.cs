@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     public int pellet_count, min_pellet_damage, max_pellet_damage, punch_damage;
+    public int hold_punch_min, hold_punch_max;
+
+    public float hold_punch_min_speed, hold_punch_max_speed;
 
     public float spread_angle, punch_distance;
 
@@ -49,6 +52,17 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 cam_pivot;
 
     private PlayerStats stats;
+
+    private PunchHitboxBehavior hitbox;
+    private List<GameObject> punched_enemies;
+
+    public List<GameObject> Punched
+    {
+        get { return punched_enemies; }
+        set { punched_enemies = value; }
+    }
+
+    public void AddPunched(GameObject other) { punched_enemies.Add(other); }
 
     public bool GetDead() { return dead; }
 
@@ -188,13 +202,55 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void HoldPunchLogic()
+    {
+        //check if the player is holding their punch
+        if (!p_anim.GetCurrentAnimatorStateInfo(0).IsName("FistHold"))
+        {
+            hitbox.active = false;
+            return;
+        }
+
+        //if they are, then measure their forward velocity, if it doesn't break the damage cap then don't do anything
+        float forward_dot = Vector3.Dot(transform.forward, rb.velocity.normalized);
+
+        if (forward_dot * rb.velocity.magnitude < hold_punch_min_speed)
+            return;
+
+        //interpolate between the min and max damage by the speed that the player is going
+        float speed = (rb.velocity.magnitude - hold_punch_min_speed) / (hold_punch_max_speed - hold_punch_min_speed);
+        int damage = (int)Mathf.Lerp(hold_punch_min, hold_punch_max, speed);
+
+        Debug.Log(damage);
+
+        //Update any enemies that are too far away to be punched by removing them from the remembered punched enemies
+        bool valid = false;
+        while (!valid)
+        {
+            valid = true;
+            for (int i = 0; i < punched_enemies.Count; i++)
+            {
+                float distance = (punched_enemies[i].transform.position - transform.position).magnitude;
+                if (distance <= punch_distance *2f) continue;
+                punched_enemies.RemoveAt(i);
+                valid = false;
+                break;
+            }
+        }
+
+        //finally punch whatever enemies are in front by modifying the punch hitbox
+        hitbox.damage = damage;
+        hitbox.knockback_dir = cam_transform.forward;
+        hitbox.active = true;
+    }
+
     void PunchLogic()
     {
         //handle the setting of the animation
         punching = Input.GetKey(KeyCode.F);
         p_anim.SetBool("Punching", punching);
 
-        //check if the player is in the holding animation
+        HoldPunchLogic();
     }
 
     void Look()
@@ -466,6 +522,9 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         cam_pivot = cam_transform.localPosition;
+
+        hitbox = transform.GetChild(4).GetComponent<PunchHitboxBehavior>();
+        punched_enemies = new List<GameObject>();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
