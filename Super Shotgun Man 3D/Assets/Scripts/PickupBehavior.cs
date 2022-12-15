@@ -16,4 +16,9 @@ public class PickupBehavior : MonoBehaviour
 
         mat.SetFloat("_SpriteIndex", (float)type);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
 }
