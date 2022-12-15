@@ -75,5 +75,13 @@ public class ExplosionBehavior : MonoBehaviour
             stats.TakeDamage(calc_damage, dir.normalized);
             already_damaged.Add(stats.gameObject);
         }
+        else
+        {
+            BaseEnemyBehavior stats = other.GetComponent<BaseEnemyBehavior>();
+            int calc_damage = (int)((max_radius / Vector3.Distance(other.gameObject.transform.position, transform.position)) * damage);
+            stats.TakeDamage(calc_damage, dir.normalized);
+            already_damaged.Add(stats.gameObject);
+
+        }
     }
 }

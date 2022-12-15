@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1673021265996581177
 MeshFilter:
@@ -110,7 +110,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3243c33f357919f418dd0e8d3ac8cdc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosive_shells_duration: 60
+  invincibility_duration: 60
   small_hp_bonus: 10
   big_hp_bonus: 50
   armor_bonus: 20
   type: 0
+  eshells_sprite: {fileID: 21300000, guid: 06af23afcbed8b044a054c5cceddf999, type: 3}
+  invincibility_sprite: {fileID: 21300000, guid: ad01f0f5d58780a40b7f3e30428e79f6, type: 3}

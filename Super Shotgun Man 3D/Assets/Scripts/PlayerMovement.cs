@@ -124,6 +124,9 @@ public class PlayerMovement : MonoBehaviour
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage((int)MathUtils.GaussianRandom(min_pellet_damage, max_pellet_damage), direction.normalized);
             }
 
+            if(stats.EShells)
+                FXUtils.InstanceFXObject(2, hit.point - direction * 0.001f, Quaternion.identity, null, true, 10, 0.1f, 2f);
+
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
         }
     }

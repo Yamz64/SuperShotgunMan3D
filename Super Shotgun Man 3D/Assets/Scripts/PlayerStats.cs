@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
+    private bool explosive_shells, invincible;
     private int hp, ap, shells;
     private float announce_text_fade, powerup_time, powerup_timer_max;
     [SerializeField]
@@ -16,6 +17,26 @@ public class PlayerStats : MonoBehaviour
     private Sprite[] shell_ui_images;
     private Sprite powerup_sprite;
     private GameObject last_damage_dealer;
+    private PlayerDamagingFieldBehavior field;
+
+    public bool EShells
+    {
+        get { return explosive_shells; }
+        set
+        {
+            explosive_shells = value;
+        }
+    }
+
+    public bool Invincible
+    {
+        get { return invincible; }
+        set
+        {
+            invincible = value;
+            field.active = value;
+        }
+    }
 
     public int HP
     {
@@ -105,6 +126,7 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount, GameObject dealer = null)
     {
+        if (invincible) return;
         int armor_reduction = 0;
         if (ap > 0)
             armor_reduction = (int)((float)amount * (1.0f / 3.0f));
@@ -129,6 +151,7 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 direction, GameObject dealer = null)
     {
+        if (invincible) return;
         int armor_reduction = 0;
         if (ap > 0)
             armor_reduction = (int)((float)amount * (1.0f / 3.0f));
@@ -175,6 +198,8 @@ public class PlayerStats : MonoBehaviour
             powerup_ui.color = new Color(powerup_ui.color.r, powerup_ui.color.g, powerup_ui.color.b, 0.0f);
             powerup_ui.transform.GetChild(0).GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
             powerup_time = 0.0f;
+            EShells = false;
+            Invincible = false;
         }
     }
 
@@ -197,11 +222,11 @@ public class PlayerStats : MonoBehaviour
         shell_ui = transform.GetChild(1).GetChild(5).GetChild(0).GetComponent<Image>();
         powerup_ui = transform.GetChild(1).GetChild(7).GetComponent<Image>();
         damage_vignette = transform.GetChild(1).GetChild(8).GetComponent<Image>();
+        field = transform.GetChild(3).GetComponent<PlayerDamagingFieldBehavior>();
 
         HP = 100;
         AP = 0;
         Shells = 2;
-        PowerupTime = 20.0f;
 
         announce_ui.color = new Color(announce_ui.color.r, announce_ui.color.g, announce_ui.color.b, 0.0f);
         damage_vignette.color = new Color(1.0f, 0.0f, 0.0f, 0.0f);
