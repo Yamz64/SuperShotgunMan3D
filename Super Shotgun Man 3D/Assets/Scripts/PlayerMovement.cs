@@ -38,9 +38,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool fired, reloading, landed;
 
-    private bool dead;
+    private bool dead, punching;
     
-    private Animator anim, r_anim;
+    private Animator anim, r_anim, p_anim;
 
     private Transform cam_transform;
     private Rigidbody rb;
@@ -164,6 +164,12 @@ public class PlayerMovement : MonoBehaviour
             //raycast
             FirePellet(raycast_dir);
         }
+    }
+
+    void PunchLogic()
+    {
+        punching = Input.GetKey(KeyCode.F);
+        p_anim.SetBool("Punching", punching);
     }
 
     void Look()
@@ -430,6 +436,7 @@ public class PlayerMovement : MonoBehaviour
 
         anim = transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Animator>();
         r_anim = transform.GetChild(1).GetChild(1).GetComponent<Animator>();
+        p_anim = transform.GetChild(1).GetChild(9).GetComponent<Animator>();
         cam_transform = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
@@ -450,6 +457,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         grounded = CheckGrounded();
+        PunchLogic();
         Look();
         AnimateShotgun();
         CheckSliding();
