@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public int pellet_count, min_pellet_damage, max_pellet_damage;
+    public int pellet_count, min_pellet_damage, max_pellet_damage, punch_damage;
 
-    public float spread_angle;
+    public float spread_angle, punch_distance;
 
     public float friction, c_friction;
     public float _movespeed, _accelspeed, horizontal_gravity;
@@ -166,10 +166,35 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void InitialPunch()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam_transform.position, cam_transform.forward, out hit, punch_distance, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy")))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            {
+                FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
+
+                AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 0.6f, .65f);
+            }
+            else
+            {
+                FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -cam_transform.forward));
+                hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage(punch_damage, transform.forward.normalized);
+                AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
+            }
+            
+            MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
+        }
+    }
+
     void PunchLogic()
     {
+        //handle the setting of the animation
         punching = Input.GetKey(KeyCode.F);
         p_anim.SetBool("Punching", punching);
+
+        //check if the player is in the holding animation
     }
 
     void Look()
