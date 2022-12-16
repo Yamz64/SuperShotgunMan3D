@@ -140,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if(stats.EShells)
-                FXUtils.InstanceFXObject(2, hit.point - direction * 0.001f, Quaternion.identity, null, true, 10, 0.1f, 2f);
+                FXUtils.InstanceFXObject(2, hit.point - direction * 0.001f, Quaternion.identity, null, true, 10, 0.1f, 2f, .1f);
 
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
         }
