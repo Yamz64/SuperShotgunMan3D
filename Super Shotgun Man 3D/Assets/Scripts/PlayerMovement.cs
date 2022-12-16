@@ -139,6 +139,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage((int)MathUtils.GaussianRandom(min_pellet_damage, max_pellet_damage), direction.normalized);
+                hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
             }
 
             if(stats.EShells)
@@ -199,6 +200,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -cam_transform.forward));
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage(punch_damage, transform.forward.normalized);
+                hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
                 AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
             }
             

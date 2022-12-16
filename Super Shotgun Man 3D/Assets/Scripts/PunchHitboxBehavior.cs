@@ -25,6 +25,7 @@ public class PunchHitboxBehavior : MonoBehaviour
         if (punched.Contains(other.gameObject)) return;
 
         other.GetComponent<BaseEnemyBehavior>().TakeDamage(damage, knockback_dir);
+        other.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
         FXUtils.InstanceFXObject(1, other.transform.position, Quaternion.FromToRotation(Vector3.forward, -knockback_dir));
         AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
         move.AddPunched(other.gameObject);

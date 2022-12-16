@@ -6,14 +6,14 @@ using UnityEngine.Events;
 public class BaseEnemyBehavior : MonoBehaviour
 {
     [System.Serializable]
-    private struct AnimAction
+    protected struct AnimAction
     {
         public int activation_frame;
         public UnityEvent action;
     }
 
     [System.Serializable]
-    private struct Animation
+    protected struct Animation
     {
         public int starting_index;
         public int frame_count;
@@ -25,48 +25,57 @@ public class BaseEnemyBehavior : MonoBehaviour
     }
 
     [SerializeField]
-    private int _hp, min_damage, max_damage;
+    protected int _hp, min_damage, max_damage;
 
-    private int current_frame;
-    private int current_animation;
-
-    [SerializeField]
-    private int step_count_max, step_count_min, reaction_time;
+    protected int current_frame;
+    protected int current_animation;
 
     [SerializeField]
-    private float step_distance, step_frequency, max_step_height;
-    [SerializeField]
-    private float min_attack_distance, max_attack_distance, spread;
-    [SerializeField]
-    private float knockback_resistance;
-
-    private int last_animation, last_frame;
+    protected int step_count_max, step_count_min, reaction_time;
 
     [SerializeField]
-    private int step_count, targeting_threshold, max_reaction_time;
+    protected float step_distance, step_frequency, max_step_height;
+    [SerializeField]
+    protected float min_attack_distance, max_attack_distance, spread;
+    [SerializeField]
+    protected float pain_chance;
+    [SerializeField]
+    protected float knockback_resistance;
+
+    protected int last_animation, last_frame;
 
     [SerializeField]
-    private Vector3 lookdir, death_col_offset;
-    [SerializeField]
-    private Texture2DArray spritesheet;
-
-    private float anim_tick;
-
-    private float step_frequency_max, step_height;
-
-    private bool anim_completed, collision_off;
+    protected int step_count, targeting_threshold, max_reaction_time;
 
     [SerializeField]
-    private string death_message;
+    protected Vector3 lookdir, death_col_offset;
 
-    private Material visual_mat;
-    [SerializeField]
-    private List<Animation> animations;
-    private BoxCollider col;
-    private GameObject target;
+    protected float anim_tick;
+
+    protected float step_frequency_max, step_height;
+
+    protected bool anim_completed, collision_off, in_pain;
 
     [SerializeField]
-    private Object projectile;
+    protected string death_message, enemy_tag;
+
+    protected Material visual_mat;
+    [SerializeField]
+    protected List<Animation> animations;
+    protected BoxCollider col;
+    protected GameObject target;
+
+    [SerializeField]
+    protected Object projectile;
+
+    public virtual IEnumerator PainSequence()
+    {
+        in_pain = true;
+        yield return new WaitUntil(() => current_animation == 3);
+        yield return new WaitUntil(() => !anim_completed);
+        yield return new WaitUntil(() => anim_completed);
+        in_pain = false;
+    }
 
     public int HP
     {
@@ -82,6 +91,9 @@ public class BaseEnemyBehavior : MonoBehaviour
         _hp -= amount;
         if (_hp < 0)
             _hp = 0;
+
+        if (CalculatePainChance() && !in_pain)
+            StartCoroutine(PainSequence());
     }
 
     public void TakeDamage(int amount, Vector3 direction)
@@ -90,6 +102,45 @@ public class BaseEnemyBehavior : MonoBehaviour
         if (_hp < 0)
             _hp = 0;
         GetComponent<Rigidbody>().AddForce(direction.normalized * ((float)amount / knockback_resistance));
+        if (CalculatePainChance() && !in_pain)
+            StartCoroutine(PainSequence());
+    }
+
+    public int MinDamage
+    {
+        get { return min_damage; }
+    }
+
+    public int MaxDamage
+    {
+        get { return max_damage; }
+    }
+
+    public string DeathMessage
+    {
+        get { return death_message; }
+    }
+
+    public string EnemyTag
+    {
+        get { return enemy_tag; }
+    }
+
+    public int TargetingThreshold
+    {
+        get { return targeting_threshold; }
+        set { targeting_threshold = value; }
+    }
+
+    public GameObject Target
+    {
+        get { return target; }
+        set { target = value; }
+    }
+
+    public virtual bool CalculatePainChance()
+    {
+        return MathUtils.GaussianRandom(0.0f, 100.0f) <= pain_chance;
     }
 
     //function handles collision checks
@@ -382,23 +433,34 @@ public class BaseEnemyBehavior : MonoBehaviour
     public void FireHitscan(Vector3 direction)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, LayerMask.GetMask("Ground") | LayerMask.GetMask("Player")))
+        if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, LayerMask.GetMask("Ground") | LayerMask.GetMask("Player") | LayerMask.GetMask("Enemy")))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
             else
             {
                 FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
-                hit.collider.gameObject.GetComponent<PlayerStats>().TakeDamage((int)MathUtils.GaussianRandom(min_damage, max_damage), direction.normalized, gameObject);
-                if (!hit.collider.GetComponent<PlayerMovement>().GetDead() && hit.collider.GetComponent<PlayerStats>().HP <= 0)
-                    hit.collider.GetComponent<PlayerStats>().AnnounceText = death_message;
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    hit.collider.gameObject.GetComponent<PlayerStats>().TakeDamage((int)MathUtils.GaussianRandom(min_damage, max_damage), direction.normalized, gameObject);
+                    if (!hit.collider.GetComponent<PlayerMovement>().GetDead() && hit.collider.GetComponent<PlayerStats>().HP <= 0)
+                        hit.collider.GetComponent<PlayerStats>().AnnounceText = death_message;
+                }
+                else if(hit.collider.GetComponent<BaseEnemyBehavior>().enemy_tag != enemy_tag)
+                {
+                    hit.collider.GetComponent<BaseEnemyBehavior>().TakeDamage((int)MathUtils.GaussianRandom(min_damage, max_damage), direction.normalized);
+                    if (hit.collider.GetComponent<BaseEnemyBehavior>().targeting_threshold <= 0)
+                        hit.collider.GetComponent<BaseEnemyBehavior>().target = gameObject;
+                }
+
             }
 
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
         }
     }
 
-    public void FaceTarget() { lookdir = (target.transform.position - transform.position).normalized; }
+    public virtual void FaceTarget() { lookdir = (target.transform.position - transform.position).normalized; }
 
     public virtual void Fire()
     {
@@ -410,6 +472,15 @@ public class BaseEnemyBehavior : MonoBehaviour
             shot_dir = Quaternion.AngleAxis(spread * MathUtils.GaussianRandom(-1.0f, 1.0f), Vector3.right) * shot_dir;
             lookdir = shot_dir;
             FireHitscan(lookdir);
+        }
+        else
+        {
+            Vector3 shot_dir = lookdir;
+            shot_dir = Quaternion.AngleAxis(spread * MathUtils.GaussianRandom(-1.0f, 1.0f), Vector3.up) * shot_dir;
+            shot_dir = Quaternion.AngleAxis(spread * MathUtils.GaussianRandom(-1.0f, 1.0f), Vector3.right) * shot_dir;
+            lookdir = shot_dir;
+            GameObject instance = (GameObject)Instantiate(projectile, transform.position, Quaternion.LookRotation(lookdir));
+            instance.GetComponent<ProjectileBehavior>().ignore_collisions = gameObject; 
         }
     }
 

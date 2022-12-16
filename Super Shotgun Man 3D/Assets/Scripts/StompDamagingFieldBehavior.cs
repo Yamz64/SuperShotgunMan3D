@@ -20,6 +20,7 @@ public class StompDamagingFieldBehavior : MonoBehaviour
         int damage = (int)Mathf.Lerp(min_damage, max_damage, damage_lerp);
         col.radius = Mathf.Lerp(min_size, max_size, damage_lerp);
         other.GetComponent<BaseEnemyBehavior>().TakeDamage(damage, Vector3.up);
+        other.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
         FXUtils.InstanceFXObject(2, other.transform.position, Quaternion.identity, null, false, 0, 1.0f, 1.0f);
     }
 
