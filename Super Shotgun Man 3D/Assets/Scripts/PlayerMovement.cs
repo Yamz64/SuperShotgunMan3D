@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float max_slide_timer, current_slide_speed;
 
-    private float animation_tick;
+    private float animation_tick, last_vertical_velocity;
 
     public Vector2 mouse_sens;
 
@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerStats stats;
 
     private PunchHitboxBehavior hitbox;
+    private StompDamagingFieldBehavior stompbox;
     private List<GameObject> punched_enemies;
 
     public List<GameObject> Punched
@@ -253,6 +254,36 @@ public class PlayerMovement : MonoBehaviour
         HoldPunchLogic();
     }
 
+    void StompLogic()
+    {
+        Vector3 crouch_offset = Vector3.zero;
+
+        if (aircrouching)
+            crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
+
+        bool modified_grounded = Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), 
+            -Vector3.up, Quaternion.identity, ground_check_distance * Mathf.Clamp((rb.velocity.magnitude / 2.0f), 1.0f, Mathf.Infinity), LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy"));
+        // if the player is grounded perform a stomp check
+        if (modified_grounded)
+        {
+            //the player must be moving fast enough to activate the hitbox
+            if (last_vertical_velocity < stompbox.min_speed)
+            {
+                stompbox.active = false;
+                return;
+            }
+
+            float damage_lerp = (last_vertical_velocity - stompbox.min_speed) / (stompbox.max_speed - stompbox.min_speed);
+            stompbox.damage_lerp = damage_lerp;
+            stompbox.active = true;
+            last_vertical_velocity = 0.0f;
+        }
+        else
+            stompbox.active = false;
+        //store the player's last vertical velocity
+        last_vertical_velocity = -rb.velocity.y;
+    }
+
     void Look()
     {
         //handle camera rotation
@@ -315,9 +346,11 @@ public class PlayerMovement : MonoBehaviour
         
         if (aircrouching)
             crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
-        
-        Debug.DrawRay(transform.position - Vector3.up * 0.9f + crouch_offset, Vector3.down * ground_check_distance, Color.blue, Time.deltaTime);
-        return Physics.Raycast(transform.position - Vector3.up * 0.9f + crouch_offset, -Vector3.up, ground_check_distance, LayerMask.GetMask("Ground"));
+
+        MathUtils.DrawBoxCastBox(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), Quaternion.identity, -Vector3.up, ground_check_distance, Color.cyan);
+        //Debug.Log(Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy")));
+        return Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy"));
+        //return Physics.Raycast(transform.position - Vector3.up * 0.9f + crouch_offset, -Vector3.up, ground_check_distance, LayerMask.GetMask("Ground"));
     }
 
     void ApplyFriction()
@@ -524,6 +557,7 @@ public class PlayerMovement : MonoBehaviour
         cam_pivot = cam_transform.localPosition;
 
         hitbox = transform.GetChild(4).GetComponent<PunchHitboxBehavior>();
+        stompbox = transform.GetChild(5).GetComponent<StompDamagingFieldBehavior>();
         punched_enemies = new List<GameObject>();
 
         Cursor.visible = false;
@@ -545,6 +579,7 @@ public class PlayerMovement : MonoBehaviour
         Look();
         AnimateShotgun();
         CheckSliding();
+        StompLogic();
         if (grounded)
         {
             ApplyFriction();
