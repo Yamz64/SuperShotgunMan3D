@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public int pellet_count, min_pellet_damage, max_pellet_damage, punch_damage;
     public int hold_punch_min, hold_punch_max;
 
-    public float hold_punch_min_speed, hold_punch_max_speed;
+    public float hold_punch_min_speed, hold_punch_max_speed, kickback;
 
     public float spread_angle, punch_distance;
 
@@ -74,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator FireSequence()
     {
         Fire();
+        rb.AddForce(-cam_transform.forward * kickback);
         fired = true;
         anim.SetInteger("ViewmodelState", 1);
         yield return new WaitUntil(() => anim.GetInteger("ViewmodelState") == 1);
@@ -87,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator BigFireSequence()
     {
         Fire(true);
+        rb.AddForce(-cam_transform.forward * kickback * 2.0f);
         fired = true;
         anim.SetInteger("ViewmodelState", 3);
         yield return new WaitUntil(() => anim.GetInteger("ViewmodelState") == 3);
