@@ -156,6 +156,7 @@ public class PlayerMovement : MonoBehaviour
         {
             mod_count *= 2;
             mod_spread *= 2f;
+            slide_vector = -transform.forward;
         }
         //generate a square shot pattern based off from the player's view vector
         int side_length = (int)Mathf.Sqrt(mod_count);
@@ -432,6 +433,7 @@ public class PlayerMovement : MonoBehaviour
                     cam_pivot = new Vector3(0.0f, -.25f, 0.0f);
                     col.center = new Vector3(0.0f, -0.5f, 0.0f);
                     sliding = true;
+                    current_airspeed = 0.0f;
                 }
                 else
                 {
@@ -439,6 +441,9 @@ public class PlayerMovement : MonoBehaviour
                     cam_pivot = new Vector3(0.0f, .75f, 0.0f);
                     col.center = new Vector3(0.0f, 0.5f, 0.0f);
                 }
+                set_slide_vector = false;
+                set_slide_speed = false;
+                slide_timer = max_slide_timer;
             }
         }
         else
@@ -457,6 +462,7 @@ public class PlayerMovement : MonoBehaviour
             sliding = false;
             set_slide_vector = false;
             set_slide_speed = false;
+            slide_timer = max_slide_timer;
         }
     }
 
@@ -485,16 +491,17 @@ public class PlayerMovement : MonoBehaviour
             if (!set_slide_speed)
             {
                 current_slide_speed = current_airspeed;
+                set_slide_speed = true;
             }
             //Update the slide vector based off from slopes that the player is currently on
             Vector3 crouch_offset = Vector3.zero;
 
             if (aircrouching)
                 crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
-            
+
+            bool on_slope = false;
             RaycastHit hit;
-            if (Physics.Raycast(transform.position - Vector3.up * 0.9f + crouch_offset, -Vector3.up, out hit, ground_check_distance, LayerMask.GetMask("Ground")))
-            {
+            if (Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, out hit, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground"))) { 
                 //first get the normal of the surface if it is facing straight up then don't do anything else
                 Vector3 slope_norm = hit.normal;
 
@@ -504,7 +511,9 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 tangent = Vector3.Cross(slope_norm, Vector3.up);
                     Vector3 bitangent = Vector3.Cross(slope_norm, tangent);
 
-                    slide_vector += bitangent * slope_accel * Time.deltaTime* Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
+                    slide_vector += slope_norm * slope_accel * Time.deltaTime* Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
+                    Debug.Log(slide_vector);
+                    on_slope = true;
                 }
                 else
                 {
@@ -514,10 +523,17 @@ public class PlayerMovement : MonoBehaviour
                         slide_timer = 0.0f;
                 }
             }
+
+            rb.velocity += slide_vector;
+
+            float target_slide_speed = 0.0f;
+            if(current_slide_speed > _movespeed)
+                target_slide_speed = Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
+            else
+                target_slide_speed = Mathf.Lerp(slidespeed, _movespeed, slide_timer / max_slide_timer);
             
-            rb.velocity += slide_vector * 1000.0f;
-            float target_slide_speed = Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
-            rb.velocity = rb.velocity.normalized * target_slide_speed;
+            if(!on_slope)
+                rb.velocity = rb.velocity.normalized * target_slide_speed;
         }
     }
 
