@@ -539,6 +539,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void CheckInteractable()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            if (!Physics.Raycast(cam_transform.position, cam_transform.forward, out hit, punch_distance, ~(LayerMask.GetMask("Player") | LayerMask.GetMask("Ignore Raycast"))))
+                return;
+            
+            if (hit.collider.tag == "Interactable")
+                hit.collider.GetComponent<Interactable>().Interact();
+        }
+    }
+
     void DeathCam()
     {
         if (!dead)
@@ -597,6 +610,7 @@ public class PlayerMovement : MonoBehaviour
         grounded = CheckGrounded();
         PunchLogic();
         Look();
+        CheckInteractable();
         AnimateShotgun();
         CheckSliding();
         StompLogic();

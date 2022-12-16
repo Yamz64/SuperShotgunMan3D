@@ -462,7 +462,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 54291882}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StandingBooth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,15 +477,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 54291881}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 45, y: 0.5, z: 16.75}
+  m_LocalPosition: {x: 0, y: 0.5, z: -8.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 528897878}
   - {fileID: 1533021554}
   - {fileID: 1094494720}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 1720717366}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &98476963
 GameObject:
@@ -6123,7 +6123,7 @@ GameObject:
   - component: {fileID: 407420218}
   - component: {fileID: 407420217}
   - component: {fileID: 407420216}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6685,13 +6685,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407420215}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 0.5, z: 17.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.5, y: 0.5, z: -7.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 1720717366}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &489492613
 Mesh:
@@ -6872,7 +6872,7 @@ GameObject:
   - component: {fileID: 528897881}
   - component: {fileID: 528897880}
   - component: {fileID: 528897879}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StandingTable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12095,7 +12095,7 @@ GameObject:
   - component: {fileID: 881547713}
   - component: {fileID: 881547712}
   - component: {fileID: 881547711}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stool (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12926,7 +12926,7 @@ GameObject:
   - component: {fileID: 891015777}
   - component: {fileID: 891015776}
   - component: {fileID: 891015775}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StandingTable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15531,7 +15531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1026812609}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StandingBooth (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15546,15 +15546,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1026812608}
   m_LocalRotation: {x: -0, y: 0.49999917, z: -0, w: 0.8660259}
-  m_LocalPosition: {x: 50.908493, y: 0.5, z: 17.091507}
+  m_LocalPosition: {x: 5.908493, y: 0.5, z: -7.908493}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 891015774}
   - {fileID: 2046078516}
   - {fileID: 881547710}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 1720717366}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
 --- !u!1 &1063863134
 GameObject:
@@ -16237,7 +16237,7 @@ GameObject:
   - component: {fileID: 1094494723}
   - component: {fileID: 1094494722}
   - component: {fileID: 1094494721}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stool (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20548,9 +20548,10 @@ GameObject:
   - component: {fileID: 1305506038}
   - component: {fileID: 1305506037}
   - component: {fileID: 1305506036}
+  - component: {fileID: 1305506041}
   m_Layer: 3
   m_Name: SecretDoorMarker
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20563,11 +20564,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1305506034}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.5, y: 0.5, z: -5}
+  m_LocalPosition: {x: -0.125, y: 0, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1720717366}
+  m_Father: {fileID: 1671191894}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1305506036
@@ -20878,6 +20879,19 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!114 &1305506041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305506034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed06febe66b57364596cb159eacf1d06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolation_speed: 1
 --- !u!43 &1377109869
 Mesh:
   m_ObjectHideFlags: 0
@@ -22563,7 +22577,7 @@ GameObject:
   - component: {fileID: 1533021557}
   - component: {fileID: 1533021556}
   - component: {fileID: 1533021555}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25259,6 +25273,38 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1671191893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1671191894}
+  m_Layer: 3
+  m_Name: DoorRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1671191894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671191893}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7.375, y: 0.5, z: -4.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1305506035}
+  m_Father: {fileID: 1720717366}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1720717360
 GameObject:
   m_ObjectHideFlags: 0
@@ -31828,7 +31874,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1305506035}
+  - {fileID: 1671191894}
   - {fileID: 2027820655}
   - {fileID: 398577776}
   - {fileID: 672488380}
@@ -31837,6 +31883,9 @@ Transform:
   - {fileID: 713102399}
   - {fileID: 1024451644}
   - {fileID: 1439505400}
+  - {fileID: 407420221}
+  - {fileID: 54291882}
+  - {fileID: 1026812609}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -33116,7 +33165,7 @@ GameObject:
   - component: {fileID: 2046078519}
   - component: {fileID: 2046078518}
   - component: {fileID: 2046078517}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
