@@ -17,6 +17,12 @@ public class BrickMafioso : BaseEnemyBehavior
         if (player_orientation.magnitude > aggro_distance)
             return;
 
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, player.transform.position - transform.position, out hit, Mathf.Infinity, LayerMask.GetMask("Player") | LayerMask.GetMask("Ground")))
+        {
+            if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Player"))
+                return;
+        }
 
         float dot = Vector3.Dot(lookdir, player_orientation.normalized);
         if(dot > 0.0f)
@@ -26,14 +32,7 @@ public class BrickMafioso : BaseEnemyBehavior
             return;
         }
 
-        if(player.GetComponent<PlayerStats>().Shells > 0 && Input.GetButtonDown("Fire1"))
-        {
-            awake = true;
-            target = GameObject.FindGameObjectWithTag("Player");
-            return;
-        }
-
-        if (player.GetComponent<PlayerStats>().Shells > 1 && Input.GetButtonDown("Fire2"))
+        if(player.GetComponent<PlayerStats>().Shells > 0 && Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2"))
         {
             awake = true;
             target = GameObject.FindGameObjectWithTag("Player");
