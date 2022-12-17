@@ -40,7 +40,7 @@ public class ProjectileBehavior : MonoBehaviour
             return;
         if (other.gameObject == ignore_collisions)
             return;
-        if (other.tag != "Enemy" && other.tag != "Player" && other.tag != "Ground")
+        if (other.tag != "Enemy" && other.tag != "Player" && other.gameObject.layer != LayerMask.NameToLayer("Ground"))
             return;
 
         int damage = (int)MathUtils.GaussianRandom(ignore_collisions.GetComponent<BaseEnemyBehavior>().MinDamage, ignore_collisions.GetComponent<BaseEnemyBehavior>().MaxDamage);
@@ -63,7 +63,7 @@ public class ProjectileBehavior : MonoBehaviour
             }
         }
 
-        if(other.tag == "Ground")
+        if(other.gameObject.layer == LayerMask.NameToLayer("Ground"))
             FXUtils.InstanceFXObject(0, transform.position, Quaternion.identity);
 
         Destroy(gameObject);
