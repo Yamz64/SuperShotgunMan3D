@@ -894,14 +894,14 @@ MonoBehaviour:
   horizontal_gravity: 1.1
   airmult_cap: 2
   jump_speed: 6
-  slidespeed: 10
+  slidespeed: 40
   sj_speed: 2
   max_sj_speed: 20
   ground_check_distance: 0.6
   max_sj_airspeed: 30
-  slide_timer: 3
+  slide_timer: 1
   current_airspeed: 0.1
-  slope_accel: 0.35
+  slope_accel: 60
   viewbob_amplitude: 0.3
   viewbob_frequency: 10
   cam_roll_amount: 2.5
