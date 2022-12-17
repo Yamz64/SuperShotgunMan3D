@@ -334,6 +334,9 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetButton("Fire2") && !fired && stats.Shells > 1)
                 StartCoroutine(BigFireSequence());
 
+            if (Input.GetButton("Fire2") && !fired && stats.Shells < 2)
+                StartCoroutine(FireSequence());
+
             if (Input.GetKeyDown(KeyCode.R) && !reloading && stats.Shells < 2)
                 StartCoroutine(ReloadSequence());
         }
