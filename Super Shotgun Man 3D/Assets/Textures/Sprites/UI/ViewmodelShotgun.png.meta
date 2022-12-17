@@ -124,7 +124,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 130
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,7 +145,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 65
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -164,9 +164,9 @@ TextureImporter:
       name: ViewmodelShotgun_2
       rect:
         serializedVersion: 2
-        x: 100
+        x: 130
         y: 65
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -187,7 +187,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -206,9 +206,9 @@ TextureImporter:
       name: ViewmodelShotgun_4
       rect:
         serializedVersion: 2
-        x: 100
+        x: 130
         y: 0
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -224,33 +224,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ViewmodelShotgun_5
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 100
-        height: 65
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc1685b47cb9e5042b07651526eb7bd9
-      internalID: -1533128725
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: ViewmodelShotgun_6
       rect:
         serializedVersion: 2
-        x: 300
+        x: 390
         y: 0
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -269,9 +248,9 @@ TextureImporter:
       name: ViewmodelShotgun_7
       rect:
         serializedVersion: 2
-        x: 400
+        x: 520
         y: 0
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -290,9 +269,9 @@ TextureImporter:
       name: ViewmodelShotgun_8
       rect:
         serializedVersion: 2
-        x: 500
+        x: 650
         y: 0
-        width: 100
+        width: 130
         height: 65
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -303,6 +282,27 @@ TextureImporter:
       bones: []
       spriteID: 8f02bfc50078b1d4da02986486c4b1fc
       internalID: 1556833017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ViewmodelShotgun_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 130
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bc56199ef553384ca4979cab794401c
+      internalID: -1533128725
       vertices: []
       indices: 
       edges: []
