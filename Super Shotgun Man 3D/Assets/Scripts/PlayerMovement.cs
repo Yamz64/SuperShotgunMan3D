@@ -20,13 +20,13 @@ public class PlayerMovement : MonoBehaviour
 
     public float ground_check_distance;
 
-    public float max_sj_airspeed, slide_timer, current_airspeed, slope_accel;
+    public float max_sj_airspeed, slide_timer, current_airspeed, slope_accel, terminal_speed_threshold;
 
     public float viewbob_amplitude, viewbob_frequency, cam_roll_amount;
     public float shotgun_frequency, shotgun_amplitude, shotgun_sway_x;
     public float death_cam_interp; 
 
-    private bool grounded, sliding, aircrouching, set_slide_vector, set_slide_speed;
+    private bool grounded, sliding, aircrouching, set_slide_vector, set_slide_speed, terminal_speed_hit;
     private float rot_x, rot_y;
 
     private float max_slide_timer, current_slide_speed;
@@ -462,6 +462,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 set_slide_vector = false;
                 set_slide_speed = false;
+                terminal_speed_hit = false;
                 slide_timer = max_slide_timer;
             }
         }
@@ -481,6 +482,7 @@ public class PlayerMovement : MonoBehaviour
             sliding = false;
             set_slide_vector = false;
             set_slide_speed = false;
+            terminal_speed_hit = false;
             slide_timer = max_slide_timer;
         }
     }
@@ -507,7 +509,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 normal = Vector3.up;
             if (CheckGrounded(ref hit))
                 normal = hit.normal;
-            if (normal == Vector3.up || rb.velocity.y > -0.1f)
+            if (normal == Vector3.up || rb.velocity.y > -0.1f && !terminal_speed_hit)
             {
                 if (slide_timer > 0.0f)
                     slide_timer -= Time.deltaTime;
@@ -528,6 +530,8 @@ public class PlayerMovement : MonoBehaviour
                 //get the orthogonal
                 slide_vector = Vector3.ProjectOnPlane(rb.velocity.normalized, normal).normalized;
                 rb.velocity += slide_vector.normalized * slope_accel * Time.deltaTime;
+                if (rb.velocity.magnitude >= terminal_speed_threshold)
+                    terminal_speed_hit = true;
             }
         }
     }
@@ -615,7 +619,7 @@ public class PlayerMovement : MonoBehaviour
             else
                 Slide();
             
-            if (Input.GetButtonDown("Jump") && rb.velocity.y <= 0.0f)
+            if (Input.GetButtonDown("Jump") && rb.velocity.y <= 0.1f)
             {
                 rb.velocity = new Vector3(rb.velocity.x, jump_speed, rb.velocity.z);
                 StartCoroutine(JumpSequence());
