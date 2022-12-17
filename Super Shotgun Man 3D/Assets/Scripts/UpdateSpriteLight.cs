@@ -35,7 +35,8 @@ public class UpdateSpriteLight : MonoBehaviour
             Material material = col.GetComponent<MeshRenderer>().sharedMaterials[submesh];
 
             //set this material's light level to the lightlevel of the material
-            GetComponent<MeshRenderer>().material.SetFloat("_Light", material.GetFloat("_Light"));
+            if(GetComponent<MeshRenderer>().material.HasProperty("_LightLevel"))
+                GetComponent<MeshRenderer>().material.SetFloat("_LightLevel", material.GetFloat("_LightLevel"));
             return;
         }
         last_triangleindex = -1;
