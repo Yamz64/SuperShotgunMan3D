@@ -361,9 +361,23 @@ public class PlayerMovement : MonoBehaviour
         //return Physics.Raycast(transform.position - Vector3.up * 0.9f + crouch_offset, -Vector3.up, ground_check_distance, LayerMask.GetMask("Ground"));
     }
 
+    bool CheckGrounded(ref RaycastHit hit)
+    {
+        Vector3 crouch_offset = Vector3.zero;
+
+        if (aircrouching)
+            crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
+
+        MathUtils.DrawBoxCastBox(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), Quaternion.identity, -Vector3.up, ground_check_distance, Color.cyan);
+        //Debug.Log(Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy")));
+        return Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, out hit, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy"));
+        //return Physics.Raycast(transform.position - Vector3.up * 0.9f + crouch_offset, -Vector3.up, ground_check_distance, LayerMask.GetMask("Ground"));
+    }
+
     void ApplyFriction()
     {
         Vector2 input_vector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (sliding) input_vector = slide_vector;
         float control = 1.0f;
         if (input_vector.magnitude == 0.0f) control = c_friction;
         float new_speed = _movespeed - Time.deltaTime * friction * control;
@@ -487,58 +501,34 @@ public class PlayerMovement : MonoBehaviour
         //simply slide in a direction
         else
         {
-            if (!set_slide_vector)
+            //sliding normally
+            //perform the grounded check to see if the player is on a slope
+            RaycastHit hit = new RaycastHit();
+            Vector3 normal = Vector3.up;
+            if (CheckGrounded(ref hit))
+                normal = hit.normal;
+            if (normal == Vector3.up || rb.velocity.y > -0.1f)
             {
-                slide_vector = (transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal")).normalized;
-                if (slide_vector.magnitude == 0.0f) slide_vector = transform.forward;
-                set_slide_vector = true;
-            }
-            if (!set_slide_speed)
-            {
-                current_slide_speed = current_airspeed;
-                set_slide_speed = true;
-            }
-            //Update the slide vector based off from slopes that the player is currently on
-            Vector3 crouch_offset = Vector3.zero;
-
-            if (aircrouching)
-                crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
-
-            bool on_slope = false;
-            RaycastHit hit;
-            if (Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), -Vector3.up, out hit, Quaternion.identity, ground_check_distance, LayerMask.GetMask("Ground"))) { 
-                //first get the normal of the surface if it is facing straight up then don't do anything else
-                Vector3 slope_norm = hit.normal;
-
-                if (hit.normal != Vector3.up)
-                {
-                    //calculate the tangent and bitangent of the slope, adjust the slide vector accordingly
-                    Vector3 tangent = Vector3.Cross(slope_norm, Vector3.up);
-                    Vector3 bitangent = Vector3.Cross(slope_norm, tangent);
-
-                    slide_vector += slope_norm * slope_accel * Time.deltaTime* Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
-                    Debug.Log(slide_vector);
-                    on_slope = true;
-                }
+                if (slide_timer > 0.0f)
+                    slide_timer -= Time.deltaTime;
                 else
+                    return;
+                if (!set_slide_vector)
                 {
-                    if (slide_timer > 0.0f)
-                        slide_timer -= Time.deltaTime;
-                    else
-                        slide_timer = 0.0f;
+                    slide_vector = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+                    slide_vector.Normalize();
+                    if (slide_vector.magnitude == 0)
+                        slide_vector = transform.forward;
+                    set_slide_vector = true;
                 }
+                rb.velocity += slide_vector.normalized * slidespeed * Time.deltaTime;
             }
-
-            rb.velocity += slide_vector;
-
-            float target_slide_speed = 0.0f;
-            if(current_slide_speed > _movespeed)
-                target_slide_speed = Mathf.Lerp(slidespeed, current_slide_speed, slide_timer / max_slide_timer);
             else
-                target_slide_speed = Mathf.Lerp(slidespeed, _movespeed, slide_timer / max_slide_timer);
-            
-            if(!on_slope)
-                rb.velocity = rb.velocity.normalized * target_slide_speed;
+            {
+                //get the orthogonal
+                slide_vector = Vector3.ProjectOnPlane(rb.velocity.normalized, normal).normalized;
+                rb.velocity += slide_vector.normalized * slope_accel * Time.deltaTime;
+            }
         }
     }
 
