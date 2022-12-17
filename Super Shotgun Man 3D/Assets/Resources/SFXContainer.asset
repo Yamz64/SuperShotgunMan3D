@@ -19,4 +19,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f85af24c7dddb3745aeb64a5757cbbff, type: 3}
   - {fileID: 8300000, guid: 4cc6289f2ee30ec47a289dc85a946b47, type: 3}
   - {fileID: 8300000, guid: 58cd48ca9e14911459909424975e3e06, type: 3}
-  MUSIC_ARRAY: []
+  MUSIC_ARRAY:
+  - song: {fileID: 8300000, guid: 71948948be4ff154fa64147c6492e33a, type: 3}
+    loop_clip: {fileID: 8300000, guid: b6b1a4607bc86234a8dde6c6b6f86908, type: 3}
+  - song: {fileID: 8300000, guid: 31a898cdc54233847beb96ab2346e469, type: 3}
+    loop_clip: {fileID: 8300000, guid: 07913a5268fc7be469208d50f1c4979b, type: 3}
+  - song: {fileID: 8300000, guid: 52d25f7006ef8534687c17643254038f, type: 3}
+    loop_clip: {fileID: 8300000, guid: 52d25f7006ef8534687c17643254038f, type: 3}

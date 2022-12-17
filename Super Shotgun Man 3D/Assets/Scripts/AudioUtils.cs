@@ -5,6 +5,7 @@ using UnityEngine;
 public static class AudioUtils
 {
     private static AudioScriptableObject sound_table = Resources.Load<AudioScriptableObject>("SFXContainer");
+    private static Coroutine music_call;
     
     private static IEnumerator PlayOnce(AudioSource sound)
     {
@@ -14,13 +15,15 @@ public static class AudioUtils
         MonoBehaviour.Destroy(sound.gameObject);
     }
 
-    private static IEnumerator MusicLoop(AudioSource song, AudioClip new_loop)
+    private static IEnumerator MusicLoop(AudioSource song, AudioClip new_loop, MonoBehaviour mono)
     {
+        song.Play();
         yield return new WaitUntil(() => song.isPlaying);
         yield return new WaitUntil(() => song.time >= song.clip.length);
         song.clip = new_loop;
         song.Stop();
         song.Play();
+        mono.StartCoroutine(MusicLoop(song, new_loop, mono));
     }
 
     //instance something from the SFX table at a point
@@ -77,12 +80,21 @@ public static class AudioUtils
             index = 0;
             Debug.LogWarning("Index provided to PlayMusic of AudioUtils is out of range, setting it to 0!");
         }
-        GameObject music_object = (GameObject)MonoBehaviour.Instantiate(Resources.Load<Object>("AudioObjectNOFALLOFF"));
+        GameObject music_object = (GameObject)MonoBehaviour.Instantiate(Resources.Load<Object>("AudioObjectMUSIC"));
         music_object.GetComponent<AudioSource>().clip = sound_table.MUSIC_ARRAY[index].song;
         music_object.GetComponent<AudioSource>().loop = true;
         if(sound_table.MUSIC_ARRAY[index].loop_clip != null)
         {
-            mono.StartCoroutine(MusicLoop(music_object.GetComponent<AudioSource>(), sound_table.MUSIC_ARRAY[index].loop_clip));
+            music_call = mono.StartCoroutine(MusicLoop(music_object.GetComponent<AudioSource>(), sound_table.MUSIC_ARRAY[index].loop_clip, mono));
         }
+    }
+
+    public static void StopeMusic(MonoBehaviour mono)
+    {
+        if (music_call == null)
+            return;
+
+        mono.StopCoroutine(music_call);
+        Object.Destroy(GameObject.FindGameObjectWithTag("Music"));
     }
 }
