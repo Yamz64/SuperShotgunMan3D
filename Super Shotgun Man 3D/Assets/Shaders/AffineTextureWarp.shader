@@ -68,9 +68,9 @@ Shader "Unlit/AffineTextureWarp"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture and lighting
-				fixed4 col = tex2D(_MainTex, i.uv * Average(ObjectScale()));
+				fixed4 col = tex2D(_MainTex, i.uv * Average(ObjectScale()) * _MainTex_ST.xy + _MainTex_ST.zw);
 				fixed4 unlitcol = col * _UnlitColor;
-				fixed4 lightmapcol = tex2D(_Lightmap, i.uv * Average(ObjectScale()));
+				fixed4 lightmapcol = tex2D(_Lightmap, i.uv * Average(ObjectScale()) * _Lightmap_ST.xy + _Lightmap_ST.zw);
 				lightmapcol = lerp(col, lightmapcol, lightmapcol.a);
 
 				//interpolate between lit values by Light
