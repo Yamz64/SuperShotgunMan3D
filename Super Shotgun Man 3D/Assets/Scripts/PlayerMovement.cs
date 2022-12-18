@@ -329,10 +329,7 @@ public class PlayerMovement : MonoBehaviour
         if(stats.Shells > 0 && !reloading)
         {
             if (Input.GetButton("Fire1") && !fired)
-            {
-                stats.face.OneTimeAnimationDriver(6);
                 StartCoroutine(FireSequence());
-            }
 
             if (Input.GetButton("Fire2") && !fired && stats.Shells > 1)
             {
@@ -341,10 +338,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if (Input.GetButton("Fire2") && !fired && stats.Shells < 2)
-            {
-                stats.face.OneTimeAnimationDriver(6);
                 StartCoroutine(FireSequence());
-            }
 
             if (Input.GetKeyDown(KeyCode.R) && !reloading && stats.Shells < 2)
                 StartCoroutine(ReloadSequence());
