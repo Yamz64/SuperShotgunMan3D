@@ -65,6 +65,7 @@ public class PickupBehavior : MonoBehaviour
                     stats.EShells = true;
                     stats.PowerUpSprite = eshells_sprite;
                     stats.AnnounceText = "Picked up explosive rounds!";
+                    stats.face.OneTimeAnimationDriver(4);
                     used = true;
                 }
                 break;
@@ -75,6 +76,7 @@ public class PickupBehavior : MonoBehaviour
                     stats.Invincible = true;
                     stats.PowerUpSprite = invincibility_sprite;
                     stats.AnnounceText = "Picked up some sort of doo-hickey?";
+                    stats.face.OneTimeAnimationDriver(4);
                     used = true;
                 }
                 break;

@@ -18,6 +18,7 @@ public class PlayerStats : MonoBehaviour
     private Sprite powerup_sprite;
     private GameObject last_damage_dealer;
     private PlayerDamagingFieldBehavior field;
+    public FaceBehavior face;
 
     public bool EShells
     {
@@ -144,8 +145,12 @@ public class PlayerStats : MonoBehaviour
         }
 
         HP = hp - amount + armor_reduction;
-        if(hp > 0)
-        damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
+        if (hp > 0)
+        {
+            damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
+            int animation = Random.Range(2, 4);
+            face.OneTimeAnimationDriver(animation);
+        }
         if (dealer != null && hp > 0) last_damage_dealer = dealer;
     }
 
@@ -170,8 +175,12 @@ public class PlayerStats : MonoBehaviour
 
         HP = hp - amount + armor_reduction;
         GetComponent<Rigidbody>().AddForce(direction.normalized * ((float)amount / knockback_resistance));
-        if(hp > 0)
-        damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
+        if (hp > 0)
+        {
+            damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
+            int animation = Random.Range(2, 4);
+            face.OneTimeAnimationDriver(animation);
+        }
         if (dealer != null && hp > 0) last_damage_dealer = dealer;
     }
 
@@ -223,6 +232,7 @@ public class PlayerStats : MonoBehaviour
         powerup_ui = transform.GetChild(1).GetChild(7).GetComponent<Image>();
         damage_vignette = transform.GetChild(1).GetChild(8).GetComponent<Image>();
         field = transform.GetChild(3).GetComponent<PlayerDamagingFieldBehavior>();
+        face = transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<FaceBehavior>();
 
         HP = 100;
         AP = 0;

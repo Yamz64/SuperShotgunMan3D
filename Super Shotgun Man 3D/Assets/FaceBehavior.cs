@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class FaceBehavior : MonoBehaviour
 {
-    public float idle_anim_chance;
+    public float idle_anim_chance, speed_threshold;
 
     public float idle_unique_duration, weapon_pickup_duration, pain_duration, soy_duration, speed_duration, angry_duration;
 
     private float max_idle_unique_duration, max_weapon_pickup_duration, max_pain_duration, max_soy_duration, max_speed_duration, max_angry_duration;
+
+    private bool anim_finished;
 
     [SerializeField]
     private int animation_state, frame_offset, unique_frame;
@@ -18,6 +20,41 @@ public class FaceBehavior : MonoBehaviour
     private List<Sprite> animation_frames;
 
     private Image image;
+
+    IEnumerator OneTimeAnimation(int state)
+    {
+        SetState(state);
+        anim_finished = false;
+        switch (state)
+        {
+            case 1:
+                yield return new WaitForSeconds(max_weapon_pickup_duration);
+                break;
+            case 2:
+                yield return new WaitForSeconds(max_pain_duration);
+                break;
+            case 3:
+                yield return new WaitForSeconds(max_pain_duration);
+                break;
+            case 4:
+                yield return new WaitForSeconds(max_soy_duration);
+                break;
+            case 6:
+                yield return new WaitForSeconds(max_angry_duration);
+                break;
+            default:
+                yield return new WaitForEndOfFrame();
+                break;
+        }
+        anim_finished = true;
+        SetState(0);
+    }
+
+    public void OneTimeAnimationDriver(int state)
+    {
+        if(animation_state != 5 && anim_finished)
+            StartCoroutine(OneTimeAnimation(state));
+    }
 
     public void SetState(int state)
     {
@@ -163,6 +200,7 @@ public class FaceBehavior : MonoBehaviour
 
     private void Start()
     {
+        anim_finished = true;
         stats = transform.root.GetComponent<PlayerStats>();
 
         max_idle_unique_duration = idle_unique_duration;
@@ -191,5 +229,9 @@ public class FaceBehavior : MonoBehaviour
     {
         frame_offset = GetAnimOffset();
         Animate();
+        if (transform.root.GetComponent<Rigidbody>().velocity.magnitude > speed_threshold)
+            animation_state = 5;
+        else if (animation_state == 5)
+            animation_state = 0;
     }
 }
