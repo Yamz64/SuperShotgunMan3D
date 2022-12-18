@@ -864,6 +864,7 @@ MonoBehaviour:
   - {fileID: 1667979449, guid: 23f9783a3599b06419f28b9bf3b74ebf, type: 3}
   - {fileID: 1373765767, guid: 23f9783a3599b06419f28b9bf3b74ebf, type: 3}
   - {fileID: 342135568, guid: 23f9783a3599b06419f28b9bf3b74ebf, type: 3}
+  face: {fileID: 0}
 --- !u!114 &4372893699553638597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1719,9 +1720,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idle_anim_chance: 0.5
+  speed_threshold: 20
   idle_unique_duration: 1
   weapon_pickup_duration: 1
-  pain_duration: 1
+  pain_duration: 0.5
   soy_duration: 1
   speed_duration: 0.125
   angry_duration: 1
