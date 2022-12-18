@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class ProjectileBehavior : MonoBehaviour
 {
-    public float life_time, starting_velocity;
+    public bool animated;
+    public int frame_count;
+    public float life_time, starting_velocity, animation_speed, animation_tick;
     public GameObject ignore_collisions;
 
+    private int current_frame;
     private Rigidbody rb;
 
     IEnumerator DeathSequence()
@@ -24,13 +27,30 @@ public class ProjectileBehavior : MonoBehaviour
         StartCoroutine(DeathSequence());
     }
 
+    void Animate()
+    {
+        animation_tick += Time.deltaTime * animation_speed;
+
+        if(animation_tick >= 1.0f)
+        {
+            current_frame++;
+            if (current_frame >= frame_count)
+                current_frame = 0;
+
+            transform.GetChild(0).GetComponent<Renderer>().material.SetFloat("_SpriteIndex", current_frame);
+            animation_tick = 0.0f;
+        }
+    }
+
     private void Awake()
     {
+        current_frame = 0;
         StartCoroutine(StartSequence());
     }
 
     private void Update()
     {
+        if (animated) Animate();
         transform.GetChild(0).transform.rotation = Quaternion.identity;
     }
 

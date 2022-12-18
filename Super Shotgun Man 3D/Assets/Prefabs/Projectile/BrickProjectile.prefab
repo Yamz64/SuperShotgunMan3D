@@ -76,8 +76,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 041982a13c48a804da2d7f04b1d6c345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animated: 1
+  frame_count: 4
   life_time: 100
   starting_velocity: 10
+  animation_speed: 8
+  animation_tick: 0
   ignore_collisions: {fileID: 0}
 --- !u!1 &5416831340044930490
 GameObject:
