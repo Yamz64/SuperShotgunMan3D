@@ -619,15 +619,15 @@ public class PlayerMovement : MonoBehaviour
             else
                 Slide();
             
-            if (Input.GetButtonDown("Jump") && rb.velocity.y <= 0.1f)
+            if (Input.GetButtonDown("Jump"))
             {
-                rb.velocity = new Vector3(rb.velocity.x, jump_speed, rb.velocity.z);
+                rb.velocity = new Vector3(rb.velocity.x, jump_speed + rb.velocity.y, rb.velocity.z);
                 StartCoroutine(JumpSequence());
                 if (sliding)
                 {
                     float current_vel = new Vector2(rb.velocity.x, rb.velocity.z).magnitude;
                     if (current_vel < 1.0f) current_vel = 1.0f;
-                    rb.velocity = transform.forward * Mathf.Clamp(sj_speed * current_vel, 0.0f, max_sj_speed) + transform.up * jump_speed + new Vector3(0.0f, Mathf.Clamp01(rb.velocity.y), 0.0f);
+                    rb.velocity = transform.forward * Mathf.Clamp(sj_speed * current_vel, 0.0f, max_sj_speed) + transform.up * (jump_speed + rb.velocity.y) / 1.5f;
                     set_slide_vector = false;
                 }
             }
