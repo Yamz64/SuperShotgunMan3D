@@ -94,7 +94,7 @@ MonoBehaviour:
   targeting_threshold: 0
   max_reaction_time: 8
   lookdir: {x: 0, y: 0, z: 1}
-  death_col_offset: {x: 0, y: -0.5, z: 0}
+  death_col_offset: {x: 0, y: -0.3, z: 0}
   death_message: You've been bricked by a Mafioso!
   enemy_tag: MAFIOSO
   animations:
