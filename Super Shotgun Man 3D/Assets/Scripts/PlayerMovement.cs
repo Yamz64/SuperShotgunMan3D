@@ -137,7 +137,11 @@ public class PlayerMovement : MonoBehaviour
                 FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
             else
             {
-                FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
+                if(hit.collider.GetComponent<BaseEnemyBehavior>().EnemyTag != "EXPLOSIVE_BARREL")
+                    FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
+                else
+                    FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
+
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage((int)MathUtils.GaussianRandom(min_pellet_damage, max_pellet_damage), direction.normalized);
                 hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
             }
