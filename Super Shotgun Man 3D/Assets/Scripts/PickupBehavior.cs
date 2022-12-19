@@ -6,7 +6,7 @@ public class PickupBehavior : MonoBehaviour
 {
     public float explosive_shells_duration, invincibility_duration;
     public int small_hp_bonus, big_hp_bonus, armor_bonus;
-    private enum PowerupType { SMALL_HP, BIG_HP, ARMOR, E_ROUNDS, INVINCIBILITY};
+    private enum PowerupType { SMALL_HP, BIG_HP, ARMOR, E_ROUNDS, INVINCIBILITY, SHOTGUN};
     [SerializeField]
     private PowerupType type;
     [SerializeField]
@@ -79,6 +79,10 @@ public class PickupBehavior : MonoBehaviour
                     stats.face.OneTimeAnimationDriver(4);
                     used = true;
                 }
+                break;
+            case PowerupType.SHOTGUN:
+                stats.HasShotgun = true;
+                used = true;
                 break;
         }
         if(used)

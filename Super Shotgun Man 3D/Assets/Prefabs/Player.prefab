@@ -857,6 +857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1301a21792cabf49b940c7c426ca973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  has_shotgun: 1
   announce_text_fade_increment: 0.33333334
   knockback_resistance: 0.125
   damage_vignette_increment: 0.33333334

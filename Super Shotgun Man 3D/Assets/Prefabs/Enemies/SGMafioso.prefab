@@ -169,6 +169,7 @@ MonoBehaviour:
   projectile: {fileID: 0}
   aggro_distance: 20
   pellet_count: 9
+  shotgun: {fileID: 1673021265996581181, guid: 9b882911481460e4d91ad55b94e8e9a9, type: 3}
 --- !u!1 &2428399279243880172
 GameObject:
   m_ObjectHideFlags: 0

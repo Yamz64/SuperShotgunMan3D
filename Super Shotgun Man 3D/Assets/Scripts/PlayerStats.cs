@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField]
+    private bool has_shotgun;
     private bool explosive_shells, invincible;
     private int hp, ap, shells;
     private float announce_text_fade, powerup_time, powerup_timer_max;
@@ -19,6 +21,15 @@ public class PlayerStats : MonoBehaviour
     private GameObject last_damage_dealer;
     private PlayerDamagingFieldBehavior field;
     public FaceBehavior face;
+
+    public bool HasShotgun
+    {
+        get { return has_shotgun; }
+        set
+        {
+            has_shotgun = value;
+        }
+    }
 
     public bool EShells
     {
@@ -240,6 +251,9 @@ public class PlayerStats : MonoBehaviour
 
         announce_ui.color = new Color(announce_ui.color.r, announce_ui.color.g, announce_ui.color.b, 0.0f);
         damage_vignette.color = new Color(1.0f, 0.0f, 0.0f, 0.0f);
+
+        if (!has_shotgun)
+            AnnounceText = "Punch their lights out with 'F'!";
     }
 
     private void Update()

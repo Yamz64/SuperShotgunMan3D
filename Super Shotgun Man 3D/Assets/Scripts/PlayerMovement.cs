@@ -316,6 +316,13 @@ public class PlayerMovement : MonoBehaviour
 
     void AnimateShotgun()
     {
+        if (!stats.HasShotgun)
+        {
+            shotgun_position.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            return;
+        }
+        shotgun_position.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
         //Handle basic viewbobbing
         float move_velocity = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z).magnitude;
         float x_lerp = 2.0f * Mathf.Abs((animation_tick-0.5f) / shotgun_frequency - Mathf.Floor((animation_tick - 0.5f) / shotgun_frequency + 0.5f));

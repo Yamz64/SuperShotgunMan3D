@@ -6,6 +6,10 @@ public class SGMafioso : BrickMafioso
 {
     public int pellet_count;
 
+    public Object shotgun;
+    private bool dropped_shotgun;
+    private PlayerStats stats;
+
     public override void Fire()
     {
         //if no projectile is specified, fire a hitscan shot forward at a random spread angle
@@ -29,5 +33,21 @@ public class SGMafioso : BrickMafioso
             GameObject instance = (GameObject)Instantiate(projectile, transform.position, Quaternion.LookRotation(lookdir));
             instance.GetComponent<ProjectileBehavior>().ignore_collisions = gameObject;
         }
+    }
+
+    public override void AI()
+    {
+        base.AI();
+        if(HP <= 0.0f && !dropped_shotgun && !stats.HasShotgun)
+        {
+            Instantiate(shotgun, transform.position, transform.rotation);
+            dropped_shotgun = true;
+        }
+    }
+
+    public override void StartOverrides()
+    {
+        base.StartOverrides();
+        stats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
     }
 }
