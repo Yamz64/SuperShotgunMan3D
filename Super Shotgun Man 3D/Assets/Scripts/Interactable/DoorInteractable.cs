@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DoorInteractable : Interactable
 {
+    public bool locked;
     public float interpolation_speed;
+    public string locked_text;
 
     private float interpolation_factor;
     private bool direction_toggle, finished_animation;
@@ -15,6 +17,10 @@ public class DoorInteractable : Interactable
 
     public override void Interact()
     {
+        if (locked) {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>().AnnounceText = locked_text;
+            return;
+        }
         if(finished_animation)
             direction_toggle = !direction_toggle;
     }
