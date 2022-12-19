@@ -99,6 +99,7 @@ MonoBehaviour:
   enemy_tag: EXPLOSIVE_BARREL
   animations: []
   projectile: {fileID: 0}
+  radius: 4
 --- !u!1 &8384995076660322408
 GameObject:
   m_ObjectHideFlags: 0

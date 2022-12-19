@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ExplodingBarrelBehavior : BaseEnemyBehavior
 {
+    public float radius;
+
     public override void UpdateAnimationViewAngle() { }
     public override void Animate() { }
 
@@ -11,7 +13,7 @@ public class ExplodingBarrelBehavior : BaseEnemyBehavior
     {
         if(HP <= 0)
         {
-            FXUtils.InstanceFXObject(2, transform.position, Quaternion.identity, null, true, 75, 0.5f, 4f, 1f);
+            FXUtils.InstanceFXObject(2, transform.position, Quaternion.identity, null, true, 75, 0.5f, radius, 1f);
             Destroy(gameObject);
         }
     }

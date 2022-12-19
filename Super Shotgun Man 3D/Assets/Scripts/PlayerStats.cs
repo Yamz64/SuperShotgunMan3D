@@ -66,7 +66,7 @@ public class PlayerStats : MonoBehaviour
             else if (ap < 0)
                 ap = 0;
 
-            ap_text.text = $"AP:\n{ap}%";
+            ap_text.text = $"RS:\n{ap}%";
         }
     }
 
