@@ -50,14 +50,20 @@ public class ExplosionBehavior : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (!damaging)
             return;
         if(already_damaged.Contains(other.gameObject))
             return;
-        if (other.gameObject.layer != LayerMask.NameToLayer("Player") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player") && other.gameObject.layer != LayerMask.NameToLayer("Enemy") && other.gameObject.layer != LayerMask.NameToLayer("Ground"))
             return;
+
+        //check if the ground is destructible
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+            if (other.GetComponent<DestructibleGEOBehavior>() != null)
+                other.GetComponent<DestructibleGEOBehavior>().Explode();
+        }
 
         //do a raycast check to make sure the explosion has LOS to object caught in blast
         RaycastHit hit;
