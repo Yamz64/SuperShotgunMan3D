@@ -557,7 +557,6 @@ public class BaseEnemyBehavior : MonoBehaviour
         step_frequency_max = step_frequency;
         max_reaction_time = reaction_time;
         step_height = 0.0f;
-        lookdir = transform.forward;
         collision_off = false;
 
         //create a new material instance so that other enemies are unaffected
