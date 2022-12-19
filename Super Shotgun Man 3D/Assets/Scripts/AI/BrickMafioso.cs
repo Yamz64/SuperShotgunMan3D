@@ -82,6 +82,7 @@ public class BrickMafioso : BaseEnemyBehavior
             if (step_count == 0 && reaction_time <= 0)
             {
                 TargetCheck();
+                if (target == null) return;
                 if (anim_completed)
                 {
                     current_animation = 0;
