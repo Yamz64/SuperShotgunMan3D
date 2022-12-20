@@ -7,14 +7,14 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private bool has_shotgun;
-    private bool explosive_shells, invincible;
+    private bool explosive_shells, invincible, fade_direction, finished_fade;
     private int hp, ap, shells;
     private float announce_text_fade, powerup_time, powerup_timer_max;
     [SerializeField]
-    private float announce_text_fade_increment, knockback_resistance, damage_vignette_increment;
+    private float announce_text_fade_increment, knockback_resistance, damage_vignette_increment, fade_vignette_increment;
     private string announce_text;
     private Text hp_text, ap_text, announce_ui;
-    private Image shell_ui, powerup_ui, damage_vignette;
+    private Image shell_ui, powerup_ui, damage_vignette, fade_vignette;
     [SerializeField]
     private Sprite[] shell_ui_images;
     private Sprite powerup_sprite;
@@ -48,6 +48,11 @@ public class PlayerStats : MonoBehaviour
             invincible = value;
             field.active = value;
         }
+    }
+
+    public bool FadeFinished
+    {
+        get { return finished_fade; }
     }
 
     public int HP
@@ -234,8 +239,47 @@ public class PlayerStats : MonoBehaviour
         damage_vignette.color = new Color(1.0f, 0.0f, 0.0f, progress);
     }
 
+    public void ToggleFade() { fade_direction = !fade_direction; }
+    
+    void Fade()
+    {
+        //fade in
+        if (!fade_direction)
+        {
+            if (fade_vignette.color.a == 0.0f)
+            {
+                finished_fade = true;
+                return;
+            }
+            float progress = fade_vignette.color.a;
+            if (progress > 0.0f)
+                progress -= Time.deltaTime * fade_vignette_increment;
+            else
+                progress = 0.0f;
+            fade_vignette.color = new Color(0.0f, 0.0f, 0.0f, progress);
+            finished_fade = false;
+        }
+        //fade out
+        else
+        {
+            if (fade_vignette.color.a == 1.0f)
+            {
+                finished_fade = true;
+                return;
+            }
+            float progress = fade_vignette.color.a;
+            if (progress < 1.0f)
+                progress += Time.deltaTime * fade_vignette_increment;
+            else
+                progress = 1.0f;
+            fade_vignette.color = new Color(0.0f, 0.0f, 0.0f, progress);
+            finished_fade = false;
+        }
+    }
+
     private void Awake()
     {
+        fade_direction = false;
         hp_text = transform.GetChild(1).GetChild(2).GetComponent<Text>();
         ap_text = transform.GetChild(1).GetChild(3).GetComponent<Text>();
         announce_ui = transform.GetChild(1).GetChild(6).GetComponent<Text>();
@@ -244,6 +288,7 @@ public class PlayerStats : MonoBehaviour
         damage_vignette = transform.GetChild(1).GetChild(8).GetComponent<Image>();
         field = transform.GetChild(3).GetComponent<PlayerDamagingFieldBehavior>();
         face = transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<FaceBehavior>();
+        fade_vignette = transform.GetChild(1).GetChild(10).GetComponent<Image>();
 
         HP = 100;
         AP = 0;
@@ -261,5 +306,6 @@ public class PlayerStats : MonoBehaviour
         UpdateAnnounceText();
         UpdatePowerupTimer();
         UpdateDamageVignette();
+        Fade();
     }
 }

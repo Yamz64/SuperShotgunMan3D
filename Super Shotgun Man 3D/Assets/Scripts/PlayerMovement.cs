@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     public float death_cam_interp; 
 
     private bool grounded, sliding, aircrouching, set_slide_vector, set_slide_speed, terminal_speed_hit;
+    private bool has_checkpoint;
     private float rot_x, rot_y;
 
     private float max_slide_timer, current_slide_speed;
@@ -41,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool fired, reloading, landed;
 
-    private bool dead, punching;
+    private bool dead, punching, started_respawn;
     
     private Animator anim, r_anim, p_anim;
 
@@ -50,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider col;
     private Vector3 slide_vector;
     private Vector3 cam_pivot;
+    private Vector3 active_checkpoint;
 
     private PlayerStats stats;
 
@@ -61,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
     {
         get { return punched_enemies; }
         set { punched_enemies = value; }
+    }
+    public void SetActiveCheckpoint(Vector3 position)
+    {
+        active_checkpoint = position;
+        has_checkpoint = true;
     }
 
     public void AddPunched(GameObject other) { punched_enemies.Add(other); }
@@ -126,6 +134,30 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitUntil(() => r_anim.GetInteger("RootState") == 2);
         r_anim.SetInteger("RootState", 0);
         yield return new WaitUntil(() => r_anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1);
+    }
+
+    IEnumerator RespawnSequence()
+    {
+        //if the player doesn't have an active checkpoint reload the scene
+        if(!has_checkpoint)
+        {
+            stats.ToggleFade();
+            yield return new WaitUntil(() => !stats.FadeFinished);
+            yield return new WaitUntil(() => stats.FadeFinished);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            stats.ToggleFade();
+            yield return new WaitUntil(() => !stats.FadeFinished);
+            yield return new WaitUntil(() => stats.FadeFinished);
+            transform.position = active_checkpoint;
+            stats.ToggleFade();
+            stats.HP = 100;
+            stats.AP = 0;
+            dead = false;
+            started_respawn = false;
+        }
     }
 
     void FirePellet(Vector3 direction)
@@ -579,6 +611,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void DeathLogic()
+    {
+        if (Input.anyKey)
+        {
+            if (started_respawn)
+                return;
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Application.Quit();
+
+            StartCoroutine(RespawnSequence());
+            started_respawn = true;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -614,7 +660,9 @@ public class PlayerMovement : MonoBehaviour
         //don't do anything if you die
         if(stats.HP <= 0)
         {
+            stats.AnnounceText = "Press 'ESC' to close the game, press any other key to respawn at last checkpoint";
             DeathCam();
+            DeathLogic();
             return;
         }
 
