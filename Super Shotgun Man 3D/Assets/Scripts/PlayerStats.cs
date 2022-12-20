@@ -167,7 +167,7 @@ public class PlayerStats : MonoBehaviour
             int animation = Random.Range(2, 4);
             face.OneTimeAnimationDriver(animation);
         }
-        if (dealer != null && hp > 0) last_damage_dealer = dealer;
+        last_damage_dealer = dealer;
     }
 
     public void TakeDamage(int amount, Vector3 direction, GameObject dealer = null)
@@ -197,7 +197,7 @@ public class PlayerStats : MonoBehaviour
             int animation = Random.Range(2, 4);
             face.OneTimeAnimationDriver(animation);
         }
-        if (dealer != null && hp > 0) last_damage_dealer = dealer;
+        last_damage_dealer = dealer;
     }
 
     void UpdateAnnounceText()
