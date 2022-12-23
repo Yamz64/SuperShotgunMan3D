@@ -6,6 +6,7 @@ Shader "Unlit/AffineTextureWarp"
 		_Lightmap("Texture", 2D) = "white" {}
 		_LightLevel("Light Level", Float) = 0.5
 		_UnlitColor("Unlit Color", Color) = (0.0, 0.0, 0.0, 1.0)
+		_MultColor("Color", Color) = (1.0, 1.0, 1.0, 1.0)
     }
     SubShader
     {
@@ -42,6 +43,7 @@ Shader "Unlit/AffineTextureWarp"
 			float4 _Lightmap_ST;
 			float _LightLevel;
 			float4 _UnlitColor;
+			float4 _MultColor;
 
 			half3 ObjectScale() {
 				return half3(
@@ -75,7 +77,8 @@ Shader "Unlit/AffineTextureWarp"
 
 				//interpolate between lit values by Light
 				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0, 0.0, 1.0));
-				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0))
+				col *= _MultColor;
+				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0));
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
