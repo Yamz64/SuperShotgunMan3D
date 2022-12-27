@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RedBrick
+  m_Name: GreenBrick
   m_Shader: {fileID: 4800000, guid: e627b9a500d8dfd488b2fcf91c02574f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
