@@ -2616,6 +2616,7 @@ MonoBehaviour:
   friction: 25
   c_friction: 2.5
   _movespeed: 12
+  _walkspeed: 6
   _accelspeed: 10
   horizontal_gravity: 1.1
   airmult_cap: 2

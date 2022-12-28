@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float spread_angle, punch_distance;
 
     public float friction, c_friction;
-    public float _movespeed, _accelspeed, horizontal_gravity;
+    public float _movespeed, _walkspeed, _accelspeed, horizontal_gravity;
     public float airmult_cap, jump_speed;
 
     public float slidespeed, sj_speed, max_sj_speed;
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float viewbob_amplitude, viewbob_frequency, cam_roll_amount;
     public float shotgun_frequency, shotgun_amplitude, shotgun_sway_x;
-    public float death_cam_interp; 
+    public float death_cam_interp;
 
     private bool grounded, sliding, aircrouching, set_slide_vector, set_slide_speed, terminal_speed_hit;
     private bool has_checkpoint;
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     private bool fired, reloading, landed;
 
     private bool dead, punching, started_respawn;
-    
+
     private Animator anim, r_anim, p_anim;
 
     private Transform cam_transform;
@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator RespawnSequence()
     {
         //if the player doesn't have an active checkpoint reload the scene
-        if(!has_checkpoint)
+        if (!has_checkpoint)
         {
             stats.ToggleFade();
             yield return new WaitUntil(() => !stats.FadeFinished);
@@ -171,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
                 FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
             else
             {
-                if(hit.collider.GetComponent<BaseEnemyBehavior>().EnemyTag != "EXPLOSIVE_BARREL")
+                if (hit.collider.GetComponent<BaseEnemyBehavior>().EnemyTag != "EXPLOSIVE_BARREL")
                     FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
                 else
                     FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
                 hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
             }
 
-            if(stats.EShells)
+            if (stats.EShells)
                 FXUtils.InstanceFXObject(2, hit.point - direction * 0.001f, Quaternion.identity, null, true, 10, 0.1f, 2f, .1f);
 
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
@@ -241,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
                 hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
                 AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
             }
-            
+
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
         }
     }
@@ -275,7 +275,7 @@ public class PlayerMovement : MonoBehaviour
             for (int i = 0; i < punched_enemies.Count; i++)
             {
                 float distance = (punched_enemies[i].transform.position - transform.position).magnitude;
-                if (distance <= punch_distance *2f) continue;
+                if (distance <= punch_distance * 2f) continue;
                 punched_enemies.RemoveAt(i);
                 valid = false;
                 break;
@@ -304,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
         if (aircrouching)
             crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
 
-        bool modified_grounded = Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f), 
+        bool modified_grounded = Physics.BoxCast(transform.position + crouch_offset, Vector3.one * (col.radius - 0.0001f),
             -Vector3.up, Quaternion.identity, ground_check_distance * Mathf.Clamp((rb.velocity.magnitude / 2.0f), 1.0f, Mathf.Infinity), LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy"));
         // if the player is grounded perform a stomp check
         if (modified_grounded)
@@ -340,7 +340,8 @@ public class PlayerMovement : MonoBehaviour
         //handle camera roll and bobbing
         cam_transform.localPosition = cam_pivot;
         float velocity_scalar = rb.velocity.magnitude / _movespeed;
-        if (grounded && !sliding) {
+        if (grounded && !sliding)
+        {
             cam_transform.localPosition += Vector3.up * Mathf.Sin(animation_tick * viewbob_frequency) * viewbob_amplitude * velocity_scalar;
         }
 
@@ -359,7 +360,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Handle basic viewbobbing
         float move_velocity = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z).magnitude;
-        float x_lerp = 2.0f * Mathf.Abs((animation_tick-0.5f) / shotgun_frequency - Mathf.Floor((animation_tick - 0.5f) / shotgun_frequency + 0.5f));
+        float x_lerp = 2.0f * Mathf.Abs((animation_tick - 0.5f) / shotgun_frequency - Mathf.Floor((animation_tick - 0.5f) / shotgun_frequency + 0.5f));
         float x_pos = Mathf.Lerp(-shotgun_sway_x, shotgun_sway_x, x_lerp);
         x_pos = Mathf.Lerp(0.0f, x_pos, move_velocity / _movespeed);
 
@@ -371,7 +372,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Handle shooting animations
         //normal behavior
-        if(stats.Shells > 0 && !reloading)
+        if (stats.Shells > 0 && !reloading)
         {
             if (Input.GetButton("Fire1") && !fired)
                 StartCoroutine(FireSequence());
@@ -389,7 +390,7 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(ReloadSequence());
         }
         //auto reload
-        else if(stats.Shells <=0)
+        else if (stats.Shells <= 0)
         {
             if (!reloading)
                 StartCoroutine(ReloadSequence());
@@ -399,7 +400,7 @@ public class PlayerMovement : MonoBehaviour
     bool CheckGrounded()
     {
         Vector3 crouch_offset = Vector3.zero;
-        
+
         if (aircrouching)
             crouch_offset = new Vector3(0.0f, 1.0f, 0.0f);
 
@@ -444,6 +445,9 @@ public class PlayerMovement : MonoBehaviour
 
         wishspeed = wishdir.magnitude * _movespeed;
 
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            wishspeed = wishdir.magnitude * _walkspeed;
+
         currentspeed = Vector3.Dot(rb.velocity, wishdir);
         addspeed = wishspeed - currentspeed;
 
@@ -466,6 +470,9 @@ public class PlayerMovement : MonoBehaviour
 
         wishspeed = wishdir.magnitude * _movespeed;
 
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            wishspeed = wishdir.magnitude * _walkspeed;
+
         if (wishspeed > airmult_cap)
             wishspeed = airmult_cap;
 
@@ -485,7 +492,7 @@ public class PlayerMovement : MonoBehaviour
     //set sliding flag, capsule collider height, and camera positions
     void CheckSliding()
     {
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             if (sliding == false)
             {
@@ -539,7 +546,8 @@ public class PlayerMovement : MonoBehaviour
     void Slide()
     {
         //cap airspeed
-        if (!grounded) {
+        if (!grounded)
+        {
             if (rb.velocity.magnitude > max_sj_airspeed)
             {
                 Vector3 air_vel = rb.velocity.normalized;
@@ -591,7 +599,7 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit hit;
             if (!Physics.Raycast(cam_transform.position, cam_transform.forward, out hit, punch_distance, ~(LayerMask.GetMask("Player") | LayerMask.GetMask("Ignore Raycast"))))
                 return;
-            
+
             if (hit.collider.tag == "Interactable")
                 hit.collider.GetComponent<Interactable>().Interact();
         }
@@ -607,7 +615,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             cam_transform.localPosition = Vector3.Lerp(new Vector3(0.0f, 0.5f, 0.0f), death_cam_height, Mathf.Clamp01(animation_tick * death_cam_interp));
-            if(stats.LastDamageDealer != null)
+            if (stats.LastDamageDealer != null)
                 cam_transform.rotation = Quaternion.LookRotation((stats.LastDamageDealer.transform.position - transform.position).normalized, transform.up);
             shotgun_position.anchoredPosition = Vector3.Lerp(new Vector3(0.0f, 364.1079f, 0.0f), new Vector3(0.0f, 37.0f, 0.0f), Mathf.Clamp01(animation_tick * death_cam_interp));
         }
@@ -656,13 +664,16 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         p_menu = GetComponent<PauseMenuBehavior>();
+
+        col.material.dynamicFriction = 500.0f;
+        col.material.dynamicFriction = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         //don't do anything if you die
-        if(stats.HP <= 0)
+        if (stats.HP <= 0)
         {
             stats.AnnounceText = "Press 'ESC' to close the game, press any other key to respawn at last checkpoint";
             DeathCam();
@@ -686,7 +697,7 @@ public class PlayerMovement : MonoBehaviour
                 GroundAccel();
             else
                 Slide();
-            
+
             if (Input.GetButtonDown("Jump"))
             {
                 rb.velocity = new Vector3(rb.velocity.x, jump_speed + rb.velocity.y, rb.velocity.z);
