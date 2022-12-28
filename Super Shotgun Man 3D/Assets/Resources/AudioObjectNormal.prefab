@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6679225637541273528}
   m_Layer: 0
   m_Name: AudioObjectNormal
-  m_TagString: Untagged
+  m_TagString: SFX
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

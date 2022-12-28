@@ -44,7 +44,7 @@ public static class AudioUtils
         sfx_object.transform.position = position;
         if (parent != null) sfx_object.transform.parent = parent;
         sfx_object.GetComponent<AudioSource>().clip = sound_table.SFX_ARRAY[index];
-        sfx_object.GetComponent<AudioSource>().volume = volume;
+        sfx_object.GetComponent<AudioSource>().volume = volume * PlayerPrefs.GetFloat("SFX Volume", 1.0f);
         sfx_object.GetComponent<AudioSource>().pitch = pitch;
         mono.StartCoroutine(PlayOnce(sfx_object.GetComponent<AudioSource>()));
     }
@@ -67,7 +67,7 @@ public static class AudioUtils
         sfx_object.transform.position = position;
         if (parent != null) sfx_object.transform.parent = parent;
         sfx_object.GetComponent<AudioSource>().clip = sound_table.VOICE_ARRAY[index];
-        sfx_object.GetComponent<AudioSource>().volume = volume;
+        sfx_object.GetComponent<AudioSource>().volume = volume * PlayerPrefs.GetFloat("SFX Volume", 1.0f);
         sfx_object.GetComponent<AudioSource>().pitch = pitch;
         mono.StartCoroutine(PlayOnce(sfx_object.GetComponent<AudioSource>()));
     }
@@ -83,18 +83,39 @@ public static class AudioUtils
         GameObject music_object = (GameObject)MonoBehaviour.Instantiate(Resources.Load<Object>("AudioObjectMUSIC"));
         music_object.GetComponent<AudioSource>().clip = sound_table.MUSIC_ARRAY[index].song;
         music_object.GetComponent<AudioSource>().loop = true;
-        if(sound_table.MUSIC_ARRAY[index].loop_clip != null)
+        music_object.GetComponent<AudioSource>().volume = volume * PlayerPrefs.GetFloat("Music Volume", 1.0f);
+        if (sound_table.MUSIC_ARRAY[index].loop_clip != null)
         {
             music_call = mono.StartCoroutine(MusicLoop(music_object.GetComponent<AudioSource>(), sound_table.MUSIC_ARRAY[index].loop_clip, mono));
         }
     }
 
-    public static void StopeMusic(MonoBehaviour mono)
+    public static void StopMusic(MonoBehaviour mono)
     {
         if (music_call == null)
             return;
 
         mono.StopCoroutine(music_call);
         Object.Destroy(GameObject.FindGameObjectWithTag("Music"));
+    }
+
+    public static void UpdateMusicVolume()
+    {
+        GameObject[] music_objects = GameObject.FindGameObjectsWithTag("Music");
+
+        for(int i=0; i<music_objects.Length; i++)
+        {
+            music_objects[i].GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Music Volume", 1.0f);
+        }
+    }
+
+    public static void UpdateSFXVolume()
+    {
+        GameObject[] sfx_objects = GameObject.FindGameObjectsWithTag("SFX");
+
+        for (int i = 0; i < sfx_objects.Length; i++)
+        {
+            sfx_objects[i].GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("SFX Volume", 1.0f);
+        }
     }
 }

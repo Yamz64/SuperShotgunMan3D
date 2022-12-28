@@ -12,7 +12,7 @@ public class BoomBoxInteractable : Interactable
         if (active_song == 3)
             active_song = 0;
 
-        AudioUtils.StopeMusic(this);
+        AudioUtils.StopMusic(this);
         AudioUtils.PlayMusic(active_song, this, 1f);
     }
 

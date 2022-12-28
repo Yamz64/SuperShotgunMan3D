@@ -60,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
     private StompDamagingFieldBehavior stompbox;
     private List<GameObject> punched_enemies;
 
+    private PauseMenuBehavior p_menu;
+
     public List<GameObject> Punched
     {
         get { return punched_enemies; }
@@ -328,8 +330,8 @@ public class PlayerMovement : MonoBehaviour
     void Look()
     {
         //handle camera rotation
-        rot_x += Input.GetAxis("Mouse X") * mouse_sens.x;
-        rot_y += Input.GetAxis("Mouse Y") * mouse_sens.y;
+        rot_x += Input.GetAxis("Mouse X") * mouse_sens.x * (PlayerPrefs.GetFloat("Mouse Sensitivity", 0.5f) * 2.0f);
+        rot_y += Input.GetAxis("Mouse Y") * mouse_sens.y * (PlayerPrefs.GetFloat("Mouse Sensitivity", 0.5f) * 2.0f);
 
         rot_y = Mathf.Clamp(rot_y, -90.0f, 90.0f);
 
@@ -652,6 +654,8 @@ public class PlayerMovement : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        p_menu = GetComponent<PauseMenuBehavior>();
     }
 
     // Update is called once per frame
@@ -665,6 +669,8 @@ public class PlayerMovement : MonoBehaviour
             DeathLogic();
             return;
         }
+
+        if (p_menu.paused) return;
 
         grounded = CheckGrounded();
         PunchLogic();
