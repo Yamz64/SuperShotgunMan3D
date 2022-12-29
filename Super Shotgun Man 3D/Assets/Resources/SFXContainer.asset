@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f85af24c7dddb3745aeb64a5757cbbff, type: 3}
   - {fileID: 8300000, guid: 4cc6289f2ee30ec47a289dc85a946b47, type: 3}
   - {fileID: 8300000, guid: 58cd48ca9e14911459909424975e3e06, type: 3}
+  - {fileID: 8300000, guid: 07e0acb2afcb4f640bfb9a85faa4b764, type: 3}
   MUSIC_ARRAY:
   - song: {fileID: 8300000, guid: 71948948be4ff154fa64147c6492e33a, type: 3}
     loop_clip: {fileID: 8300000, guid: b6b1a4607bc86234a8dde6c6b6f86908, type: 3}
