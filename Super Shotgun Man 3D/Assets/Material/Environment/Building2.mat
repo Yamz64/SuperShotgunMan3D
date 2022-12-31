@@ -114,6 +114,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _HueShift: 0
     - _Light: 0.5
     - _LightLevel: 0.5
     - _Metallic: 0

@@ -7,6 +7,7 @@ Shader "Unlit/AffineTextureWarp"
 		_LightLevel("Light Level", Float) = 0.5
 		_UnlitColor("Unlit Color", Color) = (0.0, 0.0, 0.0, 1.0)
 		_MultColor("Color", Color) = (1.0, 1.0, 1.0, 1.0)
+        _HueShift("Hue Shift", Range(0.0, 1.0)) = 0.0
     }
     SubShader
     {
@@ -44,6 +45,7 @@ Shader "Unlit/AffineTextureWarp"
 			float _LightLevel;
 			float4 _UnlitColor;
 			float4 _MultColor;
+            float _HueShift;
 
 			half3 ObjectScale() {
 				return half3(
@@ -56,6 +58,47 @@ Shader "Unlit/AffineTextureWarp"
 			half Average(half3 scale) {
 				return (scale.x + scale.y + scale.z) / 3.0;
 			}
+
+            float3 Hue2RGB(float hue){
+                hue = frac(hue);
+                float r = abs(hue * 6.0 - 3.0) - 1.0;
+                float g = 2 - abs(hue * 6.0 - 2.0);
+                float b = 2 - abs(hue * 6.0 - 4.0);
+                float3 rgb = float3(r, g, b);
+                rgb = saturate(rgb);
+                return rgb;
+            }
+
+            float3 HSV2RGB(float3 hsv){
+                float3 rgb = Hue2RGB(hsv.x);
+                rgb = lerp(1, rgb, hsv.y);
+                rgb = rgb * hsv.z;
+                return rgb;
+            }
+
+            float3 RGB2HSV(float3 rgb){
+                float max_comp = max(rgb.r, max(rgb.g, rgb.b));
+                float min_comp = min(rgb.r, min(rgb.g, rgb.b));
+                float diff = max_comp - min_comp;
+                float hue = 0.0;
+
+                if(max_comp == rgb.r){
+                    hue = 0.0 + (rgb.g - rgb.b) / diff;
+                }
+                else if(max_comp == rgb.g)
+                {
+                    hue = 2.0 + (rgb.b - rgb.r) / diff;
+                }
+                else
+                {
+                    hue = 4.0 + (rgb.r - rgb.g) / diff;
+                }
+
+                hue = frac(hue / 6.0);
+                float sat = diff / max_comp;
+                float val = max_comp;
+                return float3(hue, sat, val);
+            }
 
             v2f vert (appdata v)
             {
@@ -79,6 +122,13 @@ Shader "Unlit/AffineTextureWarp"
 				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0, 0.0, 1.0));
 				col *= _MultColor;
 				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0));
+
+                //warp the colorspace by converting it to HSV colorspace, translating it, and converting it back to RGB
+                fixed3 col_hsv = RGB2HSV(col);
+                col_hsv.x += _HueShift;
+                fixed3 col_rgb = HSV2RGB(col_hsv);
+                col = fixed4(col_rgb.x, col_rgb.y, col_rgb.z, col.a);
+
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
