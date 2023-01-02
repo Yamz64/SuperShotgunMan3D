@@ -7,6 +7,8 @@ Shader "Unlit/AffineTextureWarp"
 		_LightLevel("Light Level", Float) = 0.5
 		_UnlitColor("Unlit Color", Color) = (0.0, 0.0, 0.0, 1.0)
 		_MultColor("Color", Color) = (1.0, 1.0, 1.0, 1.0)
+        _OutlineColor("Outline Overlay Color", Color) = (0.2, 0.07843135, 0.07843135, 1.0)
+        _ColorEpsilon("Outline Epsilon", Float) = .01
         _HueShift("Hue Shift", Range(0.0, 1.0)) = 0.0
     }
     SubShader
@@ -45,6 +47,8 @@ Shader "Unlit/AffineTextureWarp"
 			float _LightLevel;
 			float4 _UnlitColor;
 			float4 _MultColor;
+            float4 _OutlineColor;
+            float _ColorEpsilon;
             float _HueShift;
 
 			half3 ObjectScale() {
@@ -100,6 +104,10 @@ Shader "Unlit/AffineTextureWarp"
                 return float3(hue, sat, val);
             }
 
+            bool CompareColor(float4 a, float4 b){
+                return distance(a, b) > _ColorEpsilon;
+            }
+
             v2f vert (appdata v)
             {
                 v2f o;
@@ -124,10 +132,13 @@ Shader "Unlit/AffineTextureWarp"
 				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0));
 
                 //warp the colorspace by converting it to HSV colorspace, translating it, and converting it back to RGB
-                fixed3 col_hsv = RGB2HSV(col);
-                col_hsv.x += _HueShift;
-                fixed3 col_rgb = HSV2RGB(col_hsv);
-                col = fixed4(col_rgb.x, col_rgb.y, col_rgb.z, col.a);
+                if(CompareColor(col, _OutlineColor))
+                {
+                    fixed3 col_hsv = RGB2HSV(col);
+                    col_hsv.x += _HueShift;
+                    fixed3 col_rgb = HSV2RGB(col_hsv);
+                    col = fixed4(col_rgb.x, col_rgb.y, col_rgb.z, col.a);
+                }
 
 
                 // apply fog
