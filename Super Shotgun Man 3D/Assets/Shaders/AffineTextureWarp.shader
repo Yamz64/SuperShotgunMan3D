@@ -37,9 +37,12 @@ Shader "Unlit/AffineTextureWarp"
             {
                 float2 uv : TEXCOORD0;
                 float3 world_normal : TEXCOORD1;
+                float3 world_pos : TEXCOORD2;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
+
+            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -52,6 +55,8 @@ Shader "Unlit/AffineTextureWarp"
             float4 _OutlineColor;
             float _ColorEpsilon;
             float _HueShift;
+            float4 _CastingObjects[1];
+            float _CastingCount;
 
 			half3 ObjectScale() {
 				return half3(
@@ -117,6 +122,7 @@ Shader "Unlit/AffineTextureWarp"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.uv = TRANSFORM_TEX(v.uv, _Lightmap);
                 o.world_normal = UnityObjectToWorldNormal(v.world_normal);
+                o.world_pos = mul(unity_ObjectToWorld, v.vertex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -136,10 +142,24 @@ Shader "Unlit/AffineTextureWarp"
                 float light_mod_2 = (dot(i.world_normal, float3(0.0, 0.0, 1.0)) + 1.0) / 1.25;
                 light_mod_2 = clamp(light_mod_2, 0.25, 1.0);
 
+                //further modify the light value again by comparing distance of pixel with a shadowcasting object's POSITION
+                float light_mod_3 = 1.0;
+
+                if(_CastingCount > 0){
+                for(int n=0; n<1; n++){
+                    float dist = distance(i.world_pos, _CastingObjects[n].xyz);
+                    if(dist < _CastingObjects[n].w){
+                        light_mod_3 = 0.5f;
+                        break;
+                    }
+                }
+                }
+
 				//interpolate between lit values by Light
-				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0 * light_mod_1 * light_mod_2, 0.0, 1.0));
+				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0 * light_mod_1 * light_mod_2 * light_mod_3, 0.0, 1.0));
 				col *= _MultColor;
-				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0));
+				col = lerp(col, lightmapcol, clamp((_LightLevel * light_mod_3 - 0.5) * 2.0, 0.0, 1.0));
+
 
                 //warp the colorspace by converting it to HSV colorspace, translating it, and converting it back to RGB
                 if(CompareColor(col, _OutlineColor))
