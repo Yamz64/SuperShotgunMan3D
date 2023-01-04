@@ -29,12 +29,14 @@ Shader "Unlit/AffineTextureWarp"
             struct appdata
             {
                 float4 vertex : POSITION;
+                float4 world_normal : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                float3 world_normal : TEXCOORD1;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
@@ -114,6 +116,7 @@ Shader "Unlit/AffineTextureWarp"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.uv = TRANSFORM_TEX(v.uv, _Lightmap);
+                o.world_normal = UnityObjectToWorldNormal(v.world_normal);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -126,8 +129,15 @@ Shader "Unlit/AffineTextureWarp"
 				fixed4 lightmapcol = tex2D(_Lightmap, i.uv * Average(ObjectScale()) * _Lightmap_ST.xy + _Lightmap_ST.zw);
 				lightmapcol = lerp(col, lightmapcol, lightmapcol.a);
 
+                //calculate a light modifier based off from the normal's dot product with the up vector and north vector
+                float light_mod_1 = (dot(i.world_normal, float3(0.0, 1.0, 0.0)) + 1.0) / 1.25;
+                light_mod_1 = clamp(light_mod_1, 0.25, 1.0);
+
+                float light_mod_2 = (dot(i.world_normal, float3(0.0, 0.0, 1.0)) + 1.0) / 1.25;
+                light_mod_2 = clamp(light_mod_2, 0.25, 1.0);
+
 				//interpolate between lit values by Light
-				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0, 0.0, 1.0));
+				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0 * light_mod_1 * light_mod_2, 0.0, 1.0));
 				col *= _MultColor;
 				col = lerp(col, lightmapcol, clamp((_LightLevel - 0.5) * 2.0, 0.0, 1.0));
 
@@ -139,7 +149,6 @@ Shader "Unlit/AffineTextureWarp"
                     fixed3 col_rgb = HSV2RGB(col_hsv);
                     col = fixed4(col_rgb.x, col_rgb.y, col_rgb.z, col.a);
                 }
-
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
