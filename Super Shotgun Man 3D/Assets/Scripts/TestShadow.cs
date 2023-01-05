@@ -39,7 +39,6 @@ public class TestShadow : MonoBehaviour
                 if (material != last_mat)
                 {
                     last_mat.SetVectorArray("_CastingObjects", new Vector4[1] { new Vector4(69.0f, 69.0f, 69.0f, 69.0f) });
-                    last_mat.SetFloat("_CastingCount", 0);
                 }
             }
 
@@ -48,7 +47,6 @@ public class TestShadow : MonoBehaviour
             Debug.Log(temp[0]);
             material.SetVectorArray("_CastingObjects", temp);
             last_mat = material;
-            last_mat.SetFloat("_CastingCount", 1);
             return;
         }
     }

@@ -55,8 +55,7 @@ Shader "Unlit/AffineTextureWarp"
             float4 _OutlineColor;
             float _ColorEpsilon;
             float _HueShift;
-            float4 _CastingObjects[1];
-            float _CastingCount;
+            float4 _CastingObjects[256];
 
 			half3 ObjectScale() {
 				return half3(
@@ -145,14 +144,12 @@ Shader "Unlit/AffineTextureWarp"
                 //further modify the light value again by comparing distance of pixel with a shadowcasting object's POSITION
                 float light_mod_3 = 1.0;
 
-                if(_CastingCount > 0){
-                for(int n=0; n<1; n++){
+                for(int n=0; n<256; n++){
                     float dist = distance(i.world_pos, _CastingObjects[n].xyz);
                     if(dist < _CastingObjects[n].w){
                         light_mod_3 = 0.5f;
                         break;
                     }
-                }
                 }
 
 				//interpolate between lit values by Light
