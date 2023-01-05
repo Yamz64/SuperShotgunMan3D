@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1673021265996581178}
   - component: {fileID: 1673021265996581179}
   - component: {fileID: 1673021265996581180}
+  - component: {fileID: 5358777241124422601}
   m_Layer: 0
   m_Name: ShotgunPickup
   m_TagString: Pickup
@@ -118,3 +119,15 @@ MonoBehaviour:
   type: 5
   eshells_sprite: {fileID: 21300000, guid: 2845ffbe2fabc14498fda7a2fbdb9dee, type: 3}
   invincibility_sprite: {fileID: 21300000, guid: e765a419758ff0949b1d735aca930eab, type: 3}
+--- !u!114 &5358777241124422601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673021265996581181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4564f4a0bfd859f46ac150d43ed341e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
