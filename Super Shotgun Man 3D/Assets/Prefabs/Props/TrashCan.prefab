@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6884678838328343315}
   m_Layer: 3
   m_Name: TrashCan
-  m_TagString: Untagged
+  m_TagString: Prop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
