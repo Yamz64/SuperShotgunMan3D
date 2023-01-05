@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 3386067276773984043}
   - component: {fileID: 4169604407060572167}
   - component: {fileID: 8879064692836867360}
+  - component: {fileID: 4084881560718121830}
   m_Layer: 7
   m_Name: TutorialRat
   m_TagString: Enemy
@@ -340,3 +341,15 @@ MonoBehaviour:
   animations: []
   projectile: {fileID: 0}
   radius: 6
+--- !u!114 &4084881560718121830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8444288118626680515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4564f4a0bfd859f46ac150d43ed341e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

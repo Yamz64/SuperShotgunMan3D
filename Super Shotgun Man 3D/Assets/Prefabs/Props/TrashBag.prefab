@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5771503049235595756}
   - component: {fileID: 5771503049235595759}
   - component: {fileID: 5771503049235595758}
+  - component: {fileID: 7853964477597818012}
   m_Layer: 3
   m_Name: TrashBag
   m_TagString: Prop
@@ -97,3 +98,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7853964477597818012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5771503049235595729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4564f4a0bfd859f46ac150d43ed341e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

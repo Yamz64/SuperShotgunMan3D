@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2842070412245052419}
   - component: {fileID: 2842070412245052416}
   - component: {fileID: 2842070412245052417}
+  - component: {fileID: 569988867941386814}
   m_Layer: 3
   m_Name: CrateStack
   m_TagString: Prop
@@ -97,3 +98,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &569988867941386814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2842070412245052478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4564f4a0bfd859f46ac150d43ed341e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
