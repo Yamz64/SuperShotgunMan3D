@@ -44,6 +44,6 @@ Material:
     m_Floats:
     - _LightLevel: 0.25
     m_Colors:
-    - _MultColor: {r: 0.227451, g: 0.16862746, b: 0.20392159, a: 1}
+    - _MultColor: {r: 0.3529412, g: 0.2627451, b: 0.31764707, a: 1}
     - _OutlineColor: {r: 0.19607845, g: 0.07450981, b: 0.058823533, a: 0}
   m_BuildTextureStacks: []
