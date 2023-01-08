@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc7fa5da3dd865148ae7c2f14b3a74df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transition_scene: OpeningCutscene
+  transition_scene: Level1
 --- !u!114 &5242192782370620138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,7 +432,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5242192782370620143}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 015d7c5cbb12c2d47a27eb583c7a46a0, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 3113f8c3302225741925ec90c30a2c07, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}

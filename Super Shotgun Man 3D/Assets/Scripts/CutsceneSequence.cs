@@ -5,8 +5,9 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ProductionLogoSequence : MonoBehaviour
+public class CutsceneSequence : MonoBehaviour
 {
+    public string transition_scene;
     private bool faded;
     private VideoPlayer player;
     private RawImage image;
@@ -19,7 +20,7 @@ public class ProductionLogoSequence : MonoBehaviour
         StartCoroutine(Fade());
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => faded);
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene(transition_scene);
     }
 
     IEnumerator Fade(float duration = 1)

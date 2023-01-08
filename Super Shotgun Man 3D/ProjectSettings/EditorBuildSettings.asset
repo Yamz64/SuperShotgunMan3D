@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ProductionLogo.unity
     guid: 22020c4dbee23714789bfad211f2fadc
   - enabled: 1
+    path: Assets/Scenes/OpeningCutscene.unity
+    guid: 677f14d913c3b724c95ce4d96320ee95
+  - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: 16d3668798ae1d1499591f2cabb9b14d
   - enabled: 1
