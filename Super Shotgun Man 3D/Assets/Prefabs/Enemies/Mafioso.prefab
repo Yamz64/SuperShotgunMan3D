@@ -132,7 +132,7 @@ MonoBehaviour:
           m_Calls:
           - m_Target: {fileID: 5119753723169389427}
             m_TargetAssemblyTypeName: BaseEnemyBehavior, Assembly-CSharp
-            m_MethodName: Fire
+            m_MethodName: FaceTarget
             m_Mode: 1
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -144,7 +144,19 @@ MonoBehaviour:
             m_CallState: 2
           - m_Target: {fileID: 5119753723169389427}
             m_TargetAssemblyTypeName: BaseEnemyBehavior, Assembly-CSharp
-            m_MethodName: FaceTarget
+            m_MethodName: Fire
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 5119753723169389427}
+            m_TargetAssemblyTypeName: BrickMafioso, Assembly-CSharp
+            m_MethodName: PlayAtkSound
             m_Mode: 1
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
@@ -159,7 +171,23 @@ MonoBehaviour:
     looping: 0
     speed_fps: 4
     directional: 0
-    actions: []
+    actions:
+    - activation_frame: 1
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 5119753723169389427}
+            m_TargetAssemblyTypeName: BrickMafioso, Assembly-CSharp
+            m_MethodName: PlayDeathSound
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
   - starting_index: 40
     frame_count: 1
     looping: 0

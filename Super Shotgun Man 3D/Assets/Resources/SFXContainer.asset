@@ -20,6 +20,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4cc6289f2ee30ec47a289dc85a946b47, type: 3}
   - {fileID: 8300000, guid: 58cd48ca9e14911459909424975e3e06, type: 3}
   - {fileID: 8300000, guid: 07e0acb2afcb4f640bfb9a85faa4b764, type: 3}
+  - {fileID: 8300000, guid: 8f8cfc8ac95160a41991f37c3504fbb1, type: 3}
+  - {fileID: 8300000, guid: 80d3f9a73374dd54c982e4daf4c740ba, type: 3}
+  - {fileID: 8300000, guid: 4d49e93207d6e3f4092e8aea165cc7a0, type: 3}
+  - {fileID: 8300000, guid: 7f1616189aa910841a066b5aca29a251, type: 3}
+  - {fileID: 8300000, guid: 88508f99fd9cc63408e5a6d74c2448a1, type: 3}
+  - {fileID: 8300000, guid: a9f218e63d00ab543b9dd0031f44c03a, type: 3}
+  - {fileID: 8300000, guid: 419af893b9992fb4b8f647367af58dd6, type: 3}
+  - {fileID: 8300000, guid: 1108c5bfad4081048944d1c106fc92c5, type: 3}
+  - {fileID: 8300000, guid: 901d2c0d0f6699045939278006d25f72, type: 3}
+  - {fileID: 8300000, guid: 97889a587314d2247b1a9d91d98d1cbc, type: 3}
   MUSIC_ARRAY:
   - song: {fileID: 8300000, guid: 71948948be4ff154fa64147c6492e33a, type: 3}
     loop_clip: {fileID: 8300000, guid: b6b1a4607bc86234a8dde6c6b6f86908, type: 3}

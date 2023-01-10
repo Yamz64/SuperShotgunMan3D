@@ -29,6 +29,7 @@ public class BrickMafioso : BaseEnemyBehavior
         {
             awake = true;
             target = GameObject.FindGameObjectWithTag("Player");
+            PlayAwakeSound();
             return;
         }
 
@@ -36,6 +37,7 @@ public class BrickMafioso : BaseEnemyBehavior
         {
             awake = true;
             target = GameObject.FindGameObjectWithTag("Player");
+            PlayAwakeSound();
             return;
         }
 
@@ -43,6 +45,7 @@ public class BrickMafioso : BaseEnemyBehavior
         {
             awake = true;
             target = GameObject.FindGameObjectWithTag("Player");
+            PlayAwakeSound();
             return;
         }
     }
@@ -62,6 +65,33 @@ public class BrickMafioso : BaseEnemyBehavior
         }
     }
 
+    //awake sounds are indices 6-9 on the sound table
+    public void PlayAwakeSound()
+    {
+        int index = Random.Range(6, 10);
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+    }
+
+    //pain sounds are indices 12 and 13 on the sound table
+    public void PlayPainSound()
+    {
+        int index = Random.Range(12, 14);
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+    }
+
+    //death sounds are indices 10 and 11 on the sound table
+    public void PlayDeathSound()
+    {
+        int index = Random.Range(10, 12);
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+    }
+
+    //attack sound is index 14 on the sound table
+    public virtual void PlayAtkSound()
+    {
+        AudioUtils.InstanceSound(14, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+    }
+
     public override void AI()
     {
         //in this scenario attack the player at greater frequencies at close range, must have LOS
@@ -70,6 +100,7 @@ public class BrickMafioso : BaseEnemyBehavior
             if (in_pain)
             {
                 awake = true;
+                if (current_animation != 3) PlayPainSound();
                 current_animation = 3;
                 return;
             }

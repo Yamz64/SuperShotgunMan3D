@@ -10,6 +10,12 @@ public class SGMafioso : BrickMafioso
     private bool dropped_shotgun;
     private PlayerStats stats;
 
+    //attack sound is index 15 on the sound table
+    public override void PlayAtkSound()
+    {
+        AudioUtils.InstanceSound(15, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+    }
+
     public override void Fire()
     {
         //if no projectile is specified, fire a hitscan shot forward at a random spread angle
