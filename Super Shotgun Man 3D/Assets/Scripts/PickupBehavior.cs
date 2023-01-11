@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PickupBehavior : MonoBehaviour
 {
@@ -11,6 +12,41 @@ public class PickupBehavior : MonoBehaviour
     private PowerupType type;
     [SerializeField]
     private Sprite eshells_sprite, invincibility_sprite;
+
+    //only on level one is the normal sound used, otherwise play the alternate version
+    void PlayPickupShotgunSound()
+    {
+        if (SceneManager.GetActiveScene().name == "Level1")
+            AudioUtils.InstanceVoice(0, transform.position, this);
+        else
+            AudioUtils.InstanceVoice(1, transform.position, this);
+    }
+
+    //various burps whenever the player picks up a small item (indices 2-4)
+    void PlaySmallPickupSound()
+    {
+        int index = Random.Range(2, 5);
+        AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.5f));
+    }
+
+    //big burp whenever the player picks up a big item (indices 5-6), has a rare chance to play the stock burp sound (index 7)
+    void PlayBigPickupSound()
+    {
+        int index = Random.Range(5, 7);
+        if (Random.Range(0, 100) == 0)
+        {
+            index = 7;
+            AudioUtils.InstanceVoice(index, transform.position, this);
+        }
+        else
+            AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.5f));
+    }
+
+    //plays whenever the player picks up a big health at low hp
+    void PlayHealthPickupCritical()
+    {
+        AudioUtils.InstanceVoice(8, transform.position, this);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +71,15 @@ public class PickupBehavior : MonoBehaviour
                 stats.HP += small_hp_bonus;
                 stats.AnnounceText = "Picked up pizza slice!";
                 used = true;
+                PlaySmallPickupSound();
                 break;
             case PowerupType.BIG_HP:
                 if (stats.HP + big_hp_bonus < 100)
                 {
+                    if (stats.HP > 20)
+                        PlayBigPickupSound();
+                    else
+                        PlayHealthPickupCritical();
                     stats.HP += big_hp_bonus;
                     stats.AnnounceText = "Picked up pizza pie!";
                     used = true;
@@ -48,6 +89,7 @@ public class PickupBehavior : MonoBehaviour
                     stats.HP = 100;
                     stats.AnnounceText = "Picked up pizza pie!";
                     used = true;
+                    PlayBigPickupSound();
                 }
                 break;
             case PowerupType.ARMOR:
@@ -56,6 +98,7 @@ public class PickupBehavior : MonoBehaviour
                     stats.AP += armor_bonus;
                     stats.AnnounceText = "Picked up a cold one!";
                     used = true;
+                    PlaySmallPickupSound();
                 }
                 break;
             case PowerupType.E_ROUNDS:
@@ -67,6 +110,7 @@ public class PickupBehavior : MonoBehaviour
                     stats.AnnounceText = "Picked up explosive rounds!";
                     stats.face.OneTimeAnimationDriver(4);
                     used = true;
+                    PlayBigPickupSound();
                 }
                 break;
             case PowerupType.INVINCIBILITY:
@@ -78,11 +122,13 @@ public class PickupBehavior : MonoBehaviour
                     stats.AnnounceText = "Picked up some sort of doo-hickey?";
                     stats.face.OneTimeAnimationDriver(4);
                     used = true;
+                    PlayBigPickupSound();
                 }
                 break;
             case PowerupType.SHOTGUN:
                 stats.HasShotgun = true;
                 used = true;
+                PlayPickupShotgunSound();
                 break;
         }
         if(used)

@@ -7,6 +7,9 @@ public class BrickMafioso : BaseEnemyBehavior
     [SerializeField]
     private float aggro_distance;
 
+    [SerializeField]
+    private bool silent_awake;
+
     private bool awake;
 
     public void SleepSequence()
@@ -68,6 +71,7 @@ public class BrickMafioso : BaseEnemyBehavior
     //awake sounds are indices 6-9 on the sound table
     public void PlayAwakeSound()
     {
+        if (silent_awake) return;
         int index = Random.Range(6, 10);
         AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
     }

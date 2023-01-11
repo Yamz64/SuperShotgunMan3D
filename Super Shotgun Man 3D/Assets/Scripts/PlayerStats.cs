@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
-    private bool has_shotgun;
+    private bool has_shotgun, already_dead;
     private bool explosive_shells, invincible, fade_direction, finished_fade;
     private int hp, ap, shells;
     private float announce_text_fade, powerup_time, powerup_timer_max;
@@ -28,6 +28,15 @@ public class PlayerStats : MonoBehaviour
         set
         {
             has_shotgun = value;
+        }
+    }
+
+    public bool AlreadyDead
+    {
+        get { return already_dead; }
+        set
+        {
+            already_dead = value;
         }
     }
 
@@ -141,8 +150,48 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount, GameObject dealer = null)
+    //function plays a generic hitsound (index 16 of the sfx table)
+    void PlayHitSound()
     {
+        AudioUtils.InstanceSound(16, transform.position, this, null, false, 1.0f, Random.Range(0.8f, 1.2f));
+    }
+
+    //function handles logic behind the painsound (normal painsounds are indicies 11-14 of the voice table, extreme painsounds are indicies 15-18)
+    void PlayPainSound(int incoming_damage)
+    {
+        int index = 11;
+        //extreme pain
+        if(incoming_damage > 40)
+        {
+            index = Random.Range(15, 19);
+            AudioUtils.InstanceVoice(index, transform.position, this);
+        }
+
+        //if the pain isn't extreme, roll a random chance to not make a noise
+        if (Random.Range(0, 5) != 0)
+            return;
+
+        index = Random.Range(11, 15);
+        AudioUtils.InstanceVoice(index, transform.position, this);
+    }
+
+    //function handles logic behind the deathsound (index 19 and 20 are normal, 21 is an extreme death)
+    void PlayDeathSound()
+    {
+        if (already_dead) return;
+        if (HP <= -50)
+        {
+            AudioUtils.InstanceVoice(21, transform.position, this);
+            return;
+        }
+        int index = Random.Range(19, 21);
+        AudioUtils.InstanceVoice(index, transform.position, this);
+        already_dead = true;
+    }
+
+    public void TakeDamage(int amount, GameObject dealer = null, bool no_painsound = false)
+    {
+        PlayHitSound();
         if (invincible) return;
         int armor_reduction = 0;
         if (ap > 0)
@@ -166,12 +215,17 @@ public class PlayerStats : MonoBehaviour
             damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
             int animation = Random.Range(2, 4);
             face.OneTimeAnimationDriver(animation);
+            if (!no_painsound)
+                PlayPainSound(amount);
         }
+        else
+            PlayDeathSound();
         last_damage_dealer = dealer;
     }
 
-    public void TakeDamage(int amount, Vector3 direction, GameObject dealer = null)
+    public void TakeDamage(int amount, Vector3 direction, GameObject dealer = null, bool no_painsound = false)
     {
+        PlayHitSound();
         if (invincible) return;
         int armor_reduction = 0;
         if (ap > 0)
@@ -196,7 +250,12 @@ public class PlayerStats : MonoBehaviour
             damage_vignette.color = Color.Lerp(new Color(1.0f, 0.0f, 0.0f, 0.0f), Color.red, Mathf.Clamp01(amount / 100.0f));
             int animation = Random.Range(2, 4);
             face.OneTimeAnimationDriver(animation);
+            if (!no_painsound)
+                PlayPainSound(amount);
         }
+        else
+            PlayDeathSound();
+
         last_damage_dealer = dealer;
     }
 

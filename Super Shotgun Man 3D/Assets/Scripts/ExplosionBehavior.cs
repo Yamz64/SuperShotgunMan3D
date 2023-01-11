@@ -78,8 +78,7 @@ public class ExplosionBehavior : MonoBehaviour
         {
             PlayerStats stats = other.GetComponent<PlayerStats>();
             int calc_damage = (int)(damage - (1.0f / max_radius) * Vector3.Distance(other.gameObject.transform.position, transform.position));
-            Debug.Log(calc_damage);
-            stats.TakeDamage(calc_damage, dir.normalized);
+            stats.TakeDamage(calc_damage, dir.normalized, null, true);
             already_damaged.Add(stats.gameObject);
         }
         else

@@ -159,11 +159,13 @@ public class PlayerMovement : MonoBehaviour
             stats.AP = 0;
             dead = false;
             started_respawn = false;
+            stats.AlreadyDead = false;
         }
     }
 
-    void FirePellet(Vector3 direction)
+    bool FirePellet(Vector3 direction)
     {
+        bool return_value = false;
         RaycastHit hit;
         if (Physics.Raycast(cam_transform.position, direction, out hit, Mathf.Infinity, LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy")))
         {
@@ -172,7 +174,10 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 if (hit.collider.GetComponent<BaseEnemyBehavior>().EnemyTag != "EXPLOSIVE_BARREL")
+                {
                     FXUtils.InstanceFXObject(1, hit.point, Quaternion.FromToRotation(Vector3.forward, -direction));
+                    return_value = true;
+                }
                 else
                     FXUtils.InstanceFXObject(0, hit.point, Quaternion.identity);
 
@@ -185,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
 
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
         }
+        return return_value;
     }
 
     void Fire(bool big = false)
@@ -198,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
             slide_vector = -transform.forward;
         }
         //generate a square shot pattern based off from the player's view vector
+        int hit_count = 0;
         int side_length = (int)Mathf.Sqrt(mod_count);
         for (int i = 0; i < mod_count; i++)
         {
@@ -218,9 +225,25 @@ public class PlayerMovement : MonoBehaviour
             raycast_dir = Quaternion.AngleAxis(-(mod_spread / (float)(side_length - 1)) * (float)x_col, cam_transform.up) * raycast_dir;
             raycast_dir = Quaternion.AngleAxis(-(mod_spread / (float)(side_length - 1)) * (float)y_row, cam_transform.right) * raycast_dir;
 
-            //raycast
-            FirePellet(raycast_dir);
+            //raycast and record the number of hits
+            if (FirePellet(raycast_dir))
+                hit_count++;
         }
+
+        //if 75% of pellets hit, consider it a meatshot and play the voiceline
+        if ((float)hit_count / (float)mod_count >= 0.75f)
+            PlayMeatshotVoiceline();
+
+    }
+
+    //function rolls a random chance to play the meatshot voiceline (indices 9 and 10 of the voice table)
+    void PlayMeatshotVoiceline()
+    {
+        if (Random.Range(0, 100) >= 10)
+            return;
+
+        int index = Random.Range(9, 11);
+        AudioUtils.InstanceVoice(index, transform.position, this);
     }
 
     public void InitialPunch()

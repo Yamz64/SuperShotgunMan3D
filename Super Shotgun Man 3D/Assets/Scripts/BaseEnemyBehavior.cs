@@ -547,6 +547,11 @@ public class BaseEnemyBehavior : MonoBehaviour
 
     //override this function in other ai to override start function variables
     public virtual void StartOverrides() { }
+
+    public string GetEnemytag() { return enemy_tag; }
+    public int GetTargetingThreshold() { return targeting_threshold; }
+
+    public void SetTarget(GameObject t) { target = t; }
     
     // Start is called before the first frame update
     void Start()

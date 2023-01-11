@@ -12,7 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee7f58c2c7a67b4690849615f619872, type: 3}
   m_Name: SFXContainer
   m_EditorClassIdentifier: 
-  VOICE_ARRAY: []
+  VOICE_ARRAY:
+  - {fileID: 8300000, guid: 4c4ab8aca27ea344b9625ce6bb9a7866, type: 3}
+  - {fileID: 8300000, guid: 45e61d58cb075c04f8725813f2232e15, type: 3}
+  - {fileID: 8300000, guid: e0b154f8ebe80934e9741aa1f67c7600, type: 3}
+  - {fileID: 8300000, guid: f982497eb9ffad04792920924a93b2a8, type: 3}
+  - {fileID: 8300000, guid: 0d1574b211a0bd54db8c4e9da507739a, type: 3}
+  - {fileID: 8300000, guid: 3e319cfbb9ee3ac43b935dee4c261c91, type: 3}
+  - {fileID: 8300000, guid: 03a3c42ce38aa22478b758b9ea55496b, type: 3}
+  - {fileID: 8300000, guid: 4397824a86c8a7a4d8f1ad90e589331d, type: 3}
+  - {fileID: 8300000, guid: 59bfbb2606ba4ab44a7dd8e4993476c6, type: 3}
+  - {fileID: 8300000, guid: 929ae6d14f1fee74fbcba4576f53d964, type: 3}
+  - {fileID: 8300000, guid: 594d58e2b4a4e424193e71ca66f2402f, type: 3}
+  - {fileID: 8300000, guid: 8326b72ff27ae37489966f88712e0d05, type: 3}
+  - {fileID: 8300000, guid: 5070033015cb52b4692a8c1944b2be67, type: 3}
+  - {fileID: 8300000, guid: e9d600963a1b7fa40a2522fcad03a45e, type: 3}
+  - {fileID: 8300000, guid: e1adea26076c6d44eab7b2b28ef1f6c0, type: 3}
+  - {fileID: 8300000, guid: 4a67a561d48a739459e8998d735f06b8, type: 3}
+  - {fileID: 8300000, guid: 260ec8c938072a14b98ac9efa9efa213, type: 3}
+  - {fileID: 8300000, guid: 36bdfee981d9fc848b3642a5a46835de, type: 3}
+  - {fileID: 8300000, guid: a315d620d2798ff4cac4a62031194aa0, type: 3}
+  - {fileID: 8300000, guid: 668be27aa64c80c438cd95dbd2c12bfa, type: 3}
+  - {fileID: 8300000, guid: 54d6ef6b75617ee48bd1acd0bc21505b, type: 3}
+  - {fileID: 8300000, guid: f58e32ab7cdc042428d8a36bf8a945bb, type: 3}
   SFX_ARRAY:
   - {fileID: 8300000, guid: 9133582c2f34ab246acbc682916ca7e7, type: 3}
   - {fileID: 8300000, guid: 58a3ba6c429148a4dbf92c4e87c81ad4, type: 3}
@@ -30,6 +52,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1108c5bfad4081048944d1c106fc92c5, type: 3}
   - {fileID: 8300000, guid: 901d2c0d0f6699045939278006d25f72, type: 3}
   - {fileID: 8300000, guid: 97889a587314d2247b1a9d91d98d1cbc, type: 3}
+  - {fileID: 8300000, guid: 7d10666c946654c46ab2e3baefbe671d, type: 3}
   MUSIC_ARRAY:
   - song: {fileID: 8300000, guid: 71948948be4ff154fa64147c6492e33a, type: 3}
     loop_clip: {fileID: 8300000, guid: b6b1a4607bc86234a8dde6c6b6f86908, type: 3}
