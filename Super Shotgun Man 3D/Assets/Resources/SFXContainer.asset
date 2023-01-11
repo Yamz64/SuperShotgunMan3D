@@ -35,6 +35,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 668be27aa64c80c438cd95dbd2c12bfa, type: 3}
   - {fileID: 8300000, guid: 54d6ef6b75617ee48bd1acd0bc21505b, type: 3}
   - {fileID: 8300000, guid: f58e32ab7cdc042428d8a36bf8a945bb, type: 3}
+  - {fileID: 8300000, guid: ce10978efda952e4b80d280c9ea45366, type: 3}
+  - {fileID: 8300000, guid: f0ad267da54263f4ea4aaf5643f9fcc2, type: 3}
+  - {fileID: 8300000, guid: 70c38148b400ec34d941820ecdcf0e54, type: 3}
+  - {fileID: 8300000, guid: c9d05bb30a9774f4eaba53675f239f2c, type: 3}
+  - {fileID: 8300000, guid: 53a8df3e132c51741a1ec095599bb372, type: 3}
+  - {fileID: 8300000, guid: 1ef55527dd0547d40ad169cdd7f9d557, type: 3}
+  - {fileID: 8300000, guid: 009773bd94b236d48bb5661325a422e5, type: 3}
   SFX_ARRAY:
   - {fileID: 8300000, guid: 9133582c2f34ab246acbc682916ca7e7, type: 3}
   - {fileID: 8300000, guid: 58a3ba6c429148a4dbf92c4e87c81ad4, type: 3}

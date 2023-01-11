@@ -26,7 +26,7 @@ public class PickupBehavior : MonoBehaviour
     void PlaySmallPickupSound()
     {
         int index = Random.Range(2, 5);
-        AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.5f));
+        AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.0f));
     }
 
     //big burp whenever the player picks up a big item (indices 5-6), has a rare chance to play the stock burp sound (index 7)
@@ -39,7 +39,7 @@ public class PickupBehavior : MonoBehaviour
             AudioUtils.InstanceVoice(index, transform.position, this);
         }
         else
-            AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.5f));
+            AudioUtils.InstanceVoice(index, transform.position, this, null, false, 1f, Random.Range(0.5f, 1.0f));
     }
 
     //plays whenever the player picks up a big health at low hp

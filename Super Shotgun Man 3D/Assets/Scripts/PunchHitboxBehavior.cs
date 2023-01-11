@@ -11,6 +11,15 @@ public class PunchHitboxBehavior : MonoBehaviour
     private List<GameObject> punched;
     private PlayerMovement move;
 
+    //function plays a voiceline if the player kills an enemy with a punch (index 28)
+    public void PlayPunchVoiceline()
+    {
+        //roll random chance to not say a voiceline
+        if (Random.Range(0, 10) != 0) return;
+
+        AudioUtils.InstanceVoice(28, transform.position, this);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //first check if the punch hitbox is active and it hit an enemy
@@ -29,6 +38,10 @@ public class PunchHitboxBehavior : MonoBehaviour
         FXUtils.InstanceFXObject(1, other.transform.position, Quaternion.FromToRotation(Vector3.forward, -knockback_dir));
         AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
         move.AddPunched(other.gameObject);
+
+        //if the enemy has died, play a voiceline
+        if (other.GetComponent<BaseEnemyBehavior>().HP <= 0)
+            PlayPunchVoiceline();
     }
 
     private void Start()

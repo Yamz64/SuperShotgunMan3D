@@ -163,6 +163,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    //Plays a voiceline for killing a target with a pellet (indices 22-25 for a normal killsound, 26-27 for an explosive shell kill)
+    void PlayKilledWithPellet()
+    {
+        //roll a random chance to not play a voiceline
+        if (Random.Range(0, 10) != 0) return;
+
+        int index = 0;
+        if (!stats.EShells)
+        {
+            index = Random.Range(22, 26);
+            AudioUtils.InstanceVoice(index, transform.position, this);
+            return;
+        }
+        index = Random.Range(26, 28);
+        AudioUtils.InstanceVoice(index, transform.position, this);
+    }
+
     bool FirePellet(Vector3 direction)
     {
         bool return_value = false;
@@ -183,6 +200,10 @@ public class PlayerMovement : MonoBehaviour
 
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage((int)MathUtils.GaussianRandom(min_pellet_damage, max_pellet_damage), direction.normalized);
                 hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
+
+                //check if the target is dead, if the target is dead, then play a voiceline
+                if (hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().HP <= 0)
+                    PlayKilledWithPellet();
             }
 
             if (stats.EShells)
@@ -263,6 +284,8 @@ public class PlayerMovement : MonoBehaviour
                 hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage(punch_damage, transform.forward.normalized);
                 hit.collider.GetComponent<BaseEnemyBehavior>().TargetingThreshold = 100;
                 AudioUtils.InstanceSound(3, transform.position, this, transform.root, false, 1.0f, .85f);
+                if (hit.collider.gameObject.GetComponent<BaseEnemyBehavior>().HP <= 0)
+                    hitbox.PlayPunchVoiceline();
             }
 
             MathUtils.DrawPoint(hit.point, 0.04f, Color.cyan, Mathf.Infinity);
@@ -287,8 +310,6 @@ public class PlayerMovement : MonoBehaviour
         //interpolate between the min and max damage by the speed that the player is going
         float speed = (rb.velocity.magnitude - hold_punch_min_speed) / (hold_punch_max_speed - hold_punch_min_speed);
         int damage = (int)Mathf.Lerp(hold_punch_min, hold_punch_max, speed);
-
-        Debug.Log(damage);
 
         //Update any enemies that are too far away to be punched by removing them from the remembered punched enemies
         bool valid = false;

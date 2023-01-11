@@ -73,21 +73,21 @@ public class BrickMafioso : BaseEnemyBehavior
     {
         if (silent_awake) return;
         int index = Random.Range(6, 10);
-        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, .75f, Random.Range(0.95f, 1.05f));
     }
 
     //pain sounds are indices 12 and 13 on the sound table
     public void PlayPainSound()
     {
         int index = Random.Range(12, 14);
-        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, .75f, Random.Range(0.95f, 1.05f));
     }
 
     //death sounds are indices 10 and 11 on the sound table
     public void PlayDeathSound()
     {
         int index = Random.Range(10, 12);
-        AudioUtils.InstanceSound(index, transform.position, this, null, true, 1f, Random.Range(0.95f, 1.05f));
+        AudioUtils.InstanceSound(index, transform.position, this, null, true, .50f, Random.Range(0.95f, 1.05f));
     }
 
     //attack sound is index 14 on the sound table
