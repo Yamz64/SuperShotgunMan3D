@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 80
-  min_damage: 3
-  max_damage: 15
+  min_damage: 15
+  max_damage: 27
   step_count_max: 20
   step_count_min: 10
   reaction_time: 8
@@ -196,6 +196,7 @@ MonoBehaviour:
     actions: []
   projectile: {fileID: 4508201018643223774, guid: c815da025b1b61d438c67e4d63f98f8b, type: 3}
   aggro_distance: 20
+  silent_awake: 0
 --- !u!1 &391614228799209982
 GameObject:
   m_ObjectHideFlags: 0

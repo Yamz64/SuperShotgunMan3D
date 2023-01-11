@@ -667,6 +667,10 @@ public class PlayerMovement : MonoBehaviour
 
     void DeathLogic()
     {
+        grounded = CheckGrounded();
+        if(grounded)
+            ApplyFriction();
+
         if (Input.anyKey)
         {
             if (started_respawn)

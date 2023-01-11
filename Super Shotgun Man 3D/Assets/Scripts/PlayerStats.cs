@@ -219,8 +219,11 @@ public class PlayerStats : MonoBehaviour
                 PlayPainSound(amount);
         }
         else
+        {
+            if (!already_dead)
+                last_damage_dealer = dealer;
             PlayDeathSound();
-        last_damage_dealer = dealer;
+        }
     }
 
     public void TakeDamage(int amount, Vector3 direction, GameObject dealer = null, bool no_painsound = false)
@@ -254,9 +257,11 @@ public class PlayerStats : MonoBehaviour
                 PlayPainSound(amount);
         }
         else
+        {
+            if(!already_dead)
+                last_damage_dealer = dealer;
             PlayDeathSound();
-
-        last_damage_dealer = dealer;
+        }
     }
 
     void UpdateAnnounceText()

@@ -67,7 +67,7 @@ public class ProjectileBehavior : MonoBehaviour
         if(other.tag == "Player")
         {
             FXUtils.InstanceFXObject(1, transform.position, Quaternion.FromToRotation(Vector3.forward, -(other.transform.position - transform.position).normalized));
-            other.GetComponent<PlayerStats>().TakeDamage(damage, (other.transform.position - transform.position).normalized, gameObject);
+            other.GetComponent<PlayerStats>().TakeDamage(damage, (other.transform.position - transform.position).normalized, ignore_collisions);
             if (!other.GetComponent<PlayerMovement>().GetDead() && other.GetComponent<PlayerStats>().HP <= 0)
                 other.GetComponent<PlayerStats>().AnnounceText = ignore_collisions.GetComponent<BaseEnemyBehavior>().DeathMessage;
         }
