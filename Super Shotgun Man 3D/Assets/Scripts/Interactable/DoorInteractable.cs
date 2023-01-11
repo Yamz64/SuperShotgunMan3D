@@ -21,8 +21,11 @@ public class DoorInteractable : Interactable
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>().AnnounceText = locked_text;
             return;
         }
-        if(finished_animation)
+        if (finished_animation)
+        {
             direction_toggle = !direction_toggle;
+            AudioUtils.InstanceSound(17, transform.position, this, null, true, 1f, Random.Range(0.75f, 1.1f));
+        }
     }
 
     void LerpDoor()
