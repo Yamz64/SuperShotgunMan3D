@@ -13,14 +13,16 @@ Shader "Unlit/AffineTextureWarp"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque"}
         LOD 100
+        ZWrite On ZTest LEqual Cull Off
 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            
             // make fog work
             #pragma multi_compile_fog
 
@@ -40,9 +42,8 @@ Shader "Unlit/AffineTextureWarp"
                 float3 world_pos : TEXCOORD2;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float3 pos : TEXCOORD3;
             };
-
-            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -56,6 +57,7 @@ Shader "Unlit/AffineTextureWarp"
             float _ColorEpsilon;
             float _HueShift;
             float4 _CastingObjects[256];
+            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
 			half3 ObjectScale() {
 				return half3(
@@ -123,6 +125,8 @@ Shader "Unlit/AffineTextureWarp"
                 o.world_normal = UnityObjectToWorldNormal(v.world_normal);
                 o.world_pos = mul(unity_ObjectToWorld, v.vertex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
+
+                o.pos = UnityObjectToViewPos(v.vertex);
                 return o;
             }
 
@@ -169,6 +173,29 @@ Shader "Unlit/AffineTextureWarp"
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
+
+                //apply depth lighting
+                float banding_distance = 50.0;
+                float depth = length(i.pos)/ banding_distance;
+                int band_count = 10;
+                float bandvalues[10];
+
+                for (int i = 0; i < band_count; i++) {
+                    bandvalues[i] = (i + 1.0f) * (1.0f / band_count);
+                }
+
+                for (int i = 0; i < band_count; i++) {
+                    if (depth <= bandvalues[i]) {
+                        depth = bandvalues[i];
+                        break;
+                    }
+                }
+
+                depth = 1.0 - depth;
+                if (depth < 0.15)
+                    depth = 0.15;
+                col *= depth;
+
                 return col;
             }
             ENDCG

@@ -700,6 +700,7 @@ public class PlayerMovement : MonoBehaviour
         r_anim = transform.GetChild(1).GetChild(1).GetComponent<Animator>();
         p_anim = transform.GetChild(1).GetChild(9).GetComponent<Animator>();
         cam_transform = Camera.main.transform;
+        Camera.main.depthTextureMode = DepthTextureMode.Depth;
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         cam_pivot = cam_transform.localPosition;
