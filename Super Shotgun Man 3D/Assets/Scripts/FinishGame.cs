@@ -8,6 +8,7 @@ public class FinishGame : MonoBehaviour
 {
     public float fade_vignette_increment;
     private bool fade_direction, finished_fade;
+    private Text final_time_text;
     private Image fade_vignette;
 
     public void ToggleFade() { fade_direction = !fade_direction; }
@@ -70,7 +71,14 @@ public class FinishGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        fade_vignette = transform.GetChild(2).GetComponent<Image>();
+        final_time_text = transform.GetChild(1).GetComponent<Text>();
+        fade_vignette = transform.GetChild(3).GetComponent<Image>();
+
+        float time = PlayerPrefs.GetFloat("Time", 0.0f);
+        int time_hours = (int)(time / 3600.0f);
+        int time_minutes = (int)((time - time_hours * 3600.0f) / 60.0f);
+        int time_seconds = (int)(time % 60.0f);
+        final_time_text.text = $"Your final time:\n{time_hours.ToString("00")}:{time_minutes.ToString("00")}:{time_seconds.ToString("00")}";
     }
 
     // Update is called once per frame

@@ -7,13 +7,13 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private bool has_shotgun, already_dead;
-    private bool explosive_shells, invincible, fade_direction, finished_fade;
+    private bool explosive_shells, invincible, fade_direction, finished_fade, timer_go;
     private int hp, ap, shells;
-    private float announce_text_fade, powerup_time, powerup_timer_max;
+    private float announce_text_fade, powerup_time, powerup_timer_max, time;
     [SerializeField]
     private float announce_text_fade_increment, knockback_resistance, damage_vignette_increment, fade_vignette_increment;
     private string announce_text;
-    private Text hp_text, ap_text, announce_ui;
+    private Text hp_text, ap_text, announce_ui, timer_text;
     private Image shell_ui, powerup_ui, damage_vignette, fade_vignette;
     [SerializeField]
     private Sprite[] shell_ui_images;
@@ -303,6 +303,14 @@ public class PlayerStats : MonoBehaviour
         damage_vignette.color = new Color(1.0f, 0.0f, 0.0f, progress);
     }
 
+    void UpdateTimerText()
+    {
+        int time_hours = (int)(time / 3600.0f);
+        int time_minutes = (int)((time - time_hours * 3600.0f) / 60.0f);
+        int time_seconds = (int)(time % 60.0f);
+        timer_text.text = $"{time_hours.ToString("00")}:{time_minutes.ToString("00")}:{time_seconds.ToString("00")}";
+    }
+
     public void ToggleFade() { fade_direction = !fade_direction; }
     
     void Fade()
@@ -341,6 +349,24 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    public void ResetTime()
+    {
+        time = 0;
+        PlayerPrefs.SetFloat("Time", 0);
+    }
+
+    public void StartTime()
+    {
+        timer_go = true;
+    }
+
+    public void StopTime(bool clock_time = false)
+    {
+        timer_go = false;
+        if (clock_time)
+            PlayerPrefs.SetFloat("Time", time);
+    }
+
     private void Awake()
     {
         fade_direction = false;
@@ -352,7 +378,8 @@ public class PlayerStats : MonoBehaviour
         damage_vignette = transform.GetChild(1).GetChild(8).GetComponent<Image>();
         field = transform.GetChild(3).GetComponent<PlayerDamagingFieldBehavior>();
         face = transform.GetChild(1).GetChild(4).GetChild(0).GetComponent<FaceBehavior>();
-        fade_vignette = transform.GetChild(1).GetChild(10).GetComponent<Image>();
+        timer_text = transform.GetChild(1).GetChild(10).GetComponent<Text>();
+        fade_vignette = transform.GetChild(1).GetChild(11).GetComponent<Image>();
 
         HP = 100;
         AP = 0;
@@ -363,6 +390,9 @@ public class PlayerStats : MonoBehaviour
 
         if (!has_shotgun)
             AnnounceText = "Punch their lights out with 'F'!";
+
+        ResetTime();
+        StartTime();
     }
 
     private void Update()
@@ -371,5 +401,9 @@ public class PlayerStats : MonoBehaviour
         UpdatePowerupTimer();
         UpdateDamageVignette();
         Fade();
+        UpdateTimerText();
+
+        if (timer_go)
+            time += Time.deltaTime;
     }
 }

@@ -10,6 +10,7 @@ public class FinishDemo : MonoBehaviour
     IEnumerator GoToEnd()
     {
         PlayerStats stats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        stats.StopTime(true);
         yield return new WaitUntil(() => stats.FadeFinished == false);
         yield return new WaitUntil(() => stats.FadeFinished == true);
         SceneManager.LoadScene("EndOfDemo");
