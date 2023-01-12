@@ -15,7 +15,6 @@ Shader "Unlit/AffineTextureWarp"
     {
         Tags { "RenderType"="Opaque"}
         LOD 100
-        ZWrite On ZTest LEqual Cull Off
 
         Pass
         {
