@@ -576,8 +576,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            //perform a raycast above the player to make sure there is nothing blocking a crouch
+            if(sliding == true || aircrouching)
+            {
+                if (Physics.Raycast(transform.position + col.center, Vector3.up, 1.5f))
+                    return;
+            }
             if (sliding == true || aircrouching)
             {
+                Debug.DrawRay(transform.position + col.center, Vector3.up * 1.5f, Color.blue, 1.0f);
                 if (aircrouching)
                 {
                     transform.position += Vector3.up * 0.5f;
