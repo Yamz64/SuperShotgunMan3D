@@ -62,6 +62,15 @@ public class PlayerMovement : MonoBehaviour
 
     private PauseMenuBehavior p_menu;
 
+    public float _RotX
+    {
+        get { return rot_x; }
+    }
+    public float _RotY
+    {
+        get { return rot_y; }
+    }
+
     public List<GameObject> Punched
     {
         get { return punched_enemies; }
