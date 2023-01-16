@@ -13,11 +13,10 @@ Shader "Unlit/AffineTextureWarp"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque"}
-        LOD 100
-
         Pass
         {
+            Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline" "Queue" = "Geometry"}
+            LOD 100
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -55,8 +54,6 @@ Shader "Unlit/AffineTextureWarp"
             float4 _OutlineColor;
             float _ColorEpsilon;
             float _HueShift;
-            float4 _CastingObjects[256];
-            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
 			half3 ObjectScale() {
 				return half3(
@@ -144,21 +141,9 @@ Shader "Unlit/AffineTextureWarp"
                 float light_mod_2 = (dot(i.world_normal, float3(0.0, 0.0, 1.0)) + 1.0) / 1.25;
                 light_mod_2 = clamp(light_mod_2, 0.25, 1.0);
 
-                //further modify the light value again by comparing distance of pixel with a shadowcasting object's POSITION
-                float light_mod_3 = 1.0;
-
-                for(int n=0; n<256; n++){
-                    float dist = distance(i.world_pos, _CastingObjects[n].xyz);
-                    if(dist < _CastingObjects[n].w){
-                        light_mod_3 = 0.5f;
-                        break;
-                    }
-                }
-
 				//interpolate between lit values by Light
-				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0 * light_mod_1 * light_mod_2 * light_mod_3, 0.0, 1.0));
+				col = lerp(unlitcol, col, clamp(_LightLevel * 2.0 * light_mod_1 * light_mod_2, 0.0, 1.0));
 				col *= _MultColor;
-				col = lerp(col, lightmapcol, clamp((_LightLevel * light_mod_3 - 0.5) * 2.0, 0.0, 1.0));
 
 
                 //warp the colorspace by converting it to HSV colorspace, translating it, and converting it back to RGB
@@ -200,4 +185,5 @@ Shader "Unlit/AffineTextureWarp"
             ENDCG
         }
     }
+    Fallback "Diffuse"
 }

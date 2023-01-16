@@ -12,6 +12,7 @@ TagManager:
   - Checkpoint
   - SFX
   - Music
+  - Shadow
   layers:
   - Default
   - TransparentFX
