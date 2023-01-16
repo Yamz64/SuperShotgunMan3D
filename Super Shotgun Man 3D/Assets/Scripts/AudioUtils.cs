@@ -79,7 +79,7 @@ public static class AudioUtils
         sfx_object.transform.position = position;
         if (parent != null) sfx_object.transform.parent = parent;
         sfx_object.GetComponent<AudioSource>().clip = sound_table.VOICE_ARRAY[index];
-        sfx_object.GetComponent<AudioSource>().volume = volume * PlayerPrefs.GetFloat("SFX Volume", 1.0f);
+        sfx_object.GetComponent<AudioSource>().volume = volume * PlayerPrefs.GetFloat("SFX Volume", 0.5f);
         sfx_object.GetComponent<AudioSource>().pitch = pitch;
         mono.StartCoroutine(PlayOnce(sfx_object.GetComponent<AudioSource>()));
     }
