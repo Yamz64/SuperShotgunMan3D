@@ -55,7 +55,8 @@ public class PlayerStats : MonoBehaviour
         set
         {
             invincible = value;
-            field.active = value;
+            if(powerup_time > 0.0f)
+                field.active = value;
         }
     }
 
@@ -284,11 +285,14 @@ public class PlayerStats : MonoBehaviour
         }
         else
         {
-            powerup_ui.color = new Color(powerup_ui.color.r, powerup_ui.color.g, powerup_ui.color.b, 0.0f);
-            powerup_ui.transform.GetChild(0).GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-            powerup_time = 0.0f;
-            EShells = false;
-            Invincible = false;
+            if (powerup_time != float.MinValue)
+            {
+                powerup_ui.color = new Color(powerup_ui.color.r, powerup_ui.color.g, powerup_ui.color.b, 0.0f);
+                powerup_ui.transform.GetChild(0).GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                powerup_time = 0.0f;
+                EShells = false;
+                Invincible = false;
+            }
         }
     }
 

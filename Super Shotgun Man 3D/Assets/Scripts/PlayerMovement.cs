@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public float shotgun_frequency, shotgun_amplitude, shotgun_sway_x;
     public float death_cam_interp;
 
+    private bool noclip;
     private bool grounded, sliding, aircrouching, set_slide_vector, set_slide_speed, terminal_speed_hit;
     private bool has_checkpoint;
     private float rot_x, rot_y;
@@ -61,6 +62,22 @@ public class PlayerMovement : MonoBehaviour
     private List<GameObject> punched_enemies;
 
     private PauseMenuBehavior p_menu;
+
+    public void ToggleNoclip()
+    {
+        noclip = !noclip;
+
+        if (noclip)
+        {
+            GetComponent<CapsuleCollider>().enabled = false;
+            rb.useGravity = false;
+        }
+        else
+        {
+            GetComponent<CapsuleCollider>().enabled = true;
+            rb.useGravity = true;
+        }
+    }
 
     public List<GameObject> Punched
     {
@@ -533,6 +550,25 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity += new Vector3(accelspeed * wishdir.x, accelspeed * wishdir.y, accelspeed * wishdir.z);
     }
 
+    void NoclipMovement()
+    {
+        ApplyFriction();
+        GroundAccel();
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            rb.velocity += Vector3.down * _accelspeed * Time.deltaTime * 3.0f;
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rb.velocity += Vector3.up * _accelspeed * Time.deltaTime * 3.0f;
+        }
+        if (Mathf.Abs(rb.velocity.y) > _movespeed)
+        {
+            float new_movespeed = Mathf.Clamp(rb.velocity.y, -_movespeed, _movespeed);
+            rb.velocity = new Vector3(rb.velocity.x, new_movespeed, rb.velocity.z);
+        }
+    }
+
     //set sliding flag, capsule collider height, and camera positions
     void CheckSliding()
     {
@@ -693,6 +729,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        noclip = false;
         stats = GetComponent<PlayerStats>();
 
         rot_y = 0.0f;
@@ -737,46 +774,54 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (p_menu.paused) return;
+        if (p_menu.paused || GetComponent<DebugController>().ShowConsole) return;
 
         grounded = CheckGrounded();
         PunchLogic();
         Look();
         CheckInteractable();
         AnimateShotgun();
-        CheckSliding();
-        StompLogic();
-        if (grounded)
-        {
-            ApplyFriction();
-            if (!sliding)
-                GroundAccel();
-            else
-                Slide();
 
-            if (Input.GetButtonDown("Jump"))
+        if (!noclip)
+        {
+            CheckSliding();
+            StompLogic();
+            if (grounded)
             {
-                rb.velocity = new Vector3(rb.velocity.x, jump_speed + rb.velocity.y, rb.velocity.z);
-                StartCoroutine(JumpSequence());
-                if (sliding)
+                ApplyFriction();
+                if (!sliding)
+                    GroundAccel();
+                else
+                    Slide();
+
+                if (Input.GetButtonDown("Jump"))
                 {
-                    float current_vel = new Vector2(rb.velocity.x, rb.velocity.z).magnitude;
-                    if (current_vel < 1.0f) current_vel = 1.0f;
-                    rb.velocity = transform.forward * Mathf.Clamp(sj_speed * current_vel, 0.0f, max_sj_speed) + transform.up * (jump_speed + rb.velocity.y) / 1.5f;
-                    set_slide_vector = false;
+                    rb.velocity = new Vector3(rb.velocity.x, jump_speed + rb.velocity.y, rb.velocity.z);
+                    StartCoroutine(JumpSequence());
+                    if (sliding)
+                    {
+                        float current_vel = new Vector2(rb.velocity.x, rb.velocity.z).magnitude;
+                        if (current_vel < 1.0f) current_vel = 1.0f;
+                        rb.velocity = transform.forward * Mathf.Clamp(sj_speed * current_vel, 0.0f, max_sj_speed) + transform.up * (jump_speed + rb.velocity.y) / 1.5f;
+                        set_slide_vector = false;
+                    }
                 }
+                if (!landed) StartCoroutine(LandSequence());
+                landed = true;
             }
-            if (!landed) StartCoroutine(LandSequence());
-            landed = true;
+            else
+            {
+                if (!sliding)
+                    AirAccel();
+                else
+                    Slide();
+                set_slide_speed = false;
+                landed = false;
+            }
         }
         else
         {
-            if (!sliding)
-                AirAccel();
-            else
-                Slide();
-            set_slide_speed = false;
-            landed = false;
+            NoclipMovement();
         }
     }
 
