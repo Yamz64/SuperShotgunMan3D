@@ -31,6 +31,8 @@ public class ShadowBehavior : MonoBehaviour
             //now search that subsector for the submesh that contains the material struck
             MeshCollider col = hit.collider as MeshCollider;
 
+            if (col == null) return;
+
             Mesh mesh = col.sharedMesh;
 
             //optimization check to avoid the for loop
