@@ -10,16 +10,19 @@ public class Subtitles_Behavior : MonoBehaviour
     TMP_Text sub_text;              //Text to show subtitles in
     Image text_background;          //Background to show text on
 
-    string cutscene_name;           //Name of the cutscene the subtitles need to sync with
+    public string cutscene_name;    //Name of the cutscene the subtitles need to sync with
 
     List<string> script;            //Container to hold the text
 
+    float timer;
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
+        timer = 0;
+
         //Grab subtitle objects
-        GameObject subtitles = GameObject.FindGameObjectWithTag("Subtitles");
+        GameObject subtitles = this.gameObject; 
         sub_text = subtitles.transform.GetChild(1).GetComponent<TMP_Text>();
         text_background = subtitles.transform.GetChild(0).GetComponent<Image>();
 
@@ -27,14 +30,16 @@ public class Subtitles_Behavior : MonoBehaviour
         script = new List<string>();
         StreamReader input_stream;
 
+        Debug.Log("Cutscene name == " + cutscene_name);
+
         //Grab the subtitles from the relevant file in Resources depending on the scene
         switch (cutscene_name)
         {
             case ("Opening"):
-                input_stream = new StreamReader("Subtitle_Text/Cutscenes/OpeningCutscene.txt");
+                input_stream = new StreamReader("Assets/Resources/Subtitle_Text/Cutscenes/OpeningCutscene.txt");
                 break;
             default:
-                input_stream = new StreamReader("Subtitle_Text/Cutscenes/OpeningCutscene.txt");
+                input_stream = new StreamReader("Assets/Resources/Subtitle_Text/Cutscenes/OpeningCutscene.txt");
                 break;
         }
         //Read each line into the subtitles list
@@ -46,8 +51,11 @@ public class Subtitles_Behavior : MonoBehaviour
 
         input_stream.Close();
 
+        //On = Subtitles display, Off = They don't
+        string option = PlayerPrefs.GetString("Subtitles", "Off");
+
         //If this is for a cutscene, display the text
-        if (cutscene_name.Length > 0)
+        if (cutscene_name.Length > 0 && option.Equals("On"))
         {
             StartCoroutine(displaySubtitles());
         }
@@ -57,12 +65,56 @@ public class Subtitles_Behavior : MonoBehaviour
     //Used for cutscenes
     IEnumerator displaySubtitles()
     {
+        sub_text.gameObject.SetActive(true);
+        //text_background.gameObject.SetActive(true);
+        for (int i = 0; i < script.Count; i++)
+        {
+            //Strings to split main string around
+            string[] seps = { "---", "_" };
+
+            //Container to hold substrings
+            string[] subs = script[i].Split(seps, System.StringSplitOptions.RemoveEmptyEntries);
+
+            //Text to display in subtitles
+            sub_text.text = subs[2];
+
+            //Get starting time
+            int t1_0;                                       
+            string t1_0s = "" + subs[0][0] + subs[0][1];
+            int.TryParse(t1_0s, out t1_0);
+            int t2_0;
+            string t2_0s = "" + subs[0][3] + subs[0][4];
+            int.TryParse(t2_0s, out t2_0);
+            int t3_0;
+            string t3_0s = "" + subs[0][6] + subs[0][7];
+            int.TryParse(t3_0s, out t3_0);
+            int time_1 = (t1_0 * 3600) + (t2_0 * 60) + t3_0;
+
+            //Get ending time
+            int t1_1;
+            string t1_1s = "" + subs[1][0] + subs[1][1];
+            int.TryParse(t1_1s, out t1_1);
+            int t2_1;
+            string t2_1s = "" + subs[1][3] + subs[1][4];
+            int.TryParse(t2_1s, out t2_1);
+            int t3_1;
+            string t3_1s = "" + subs[1][6] + subs[1][7];
+            int.TryParse(t3_1s, out t3_1);
+            int time_2 = (t1_1 * 3600) + (t2_1 * 60) + t3_1;
+
+            //Debug.Log("Time to wait == " + time_2 + " - " + time_1 + " = " + (time_2 - time_1));
+
+            //Display the text for this amount of seconds
+            yield return new WaitForSeconds(time_2 - time_1);
+        }
         yield return new WaitForSeconds(1.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //Display current time for subtitle testing
+        timer += Time.deltaTime;
+        Debug.Log(timer);
     }
 }

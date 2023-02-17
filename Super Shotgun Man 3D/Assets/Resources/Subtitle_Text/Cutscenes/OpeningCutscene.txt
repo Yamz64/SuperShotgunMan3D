@@ -1,9 +1,9 @@
-00:00:01 - 00:00:08	[Outside Noise]
-00:00:09 - 00:00:12	[Indoor Chatting]
-00:00:13 - 00:00:15	[Door Slam]
-00:00:15 - 00:00:20	"Your time is up, Giuseppe. We're shutting your place down!"
-00:00:20 - 00:00:26	"The Boss says that we gotta shut down ALL the Pizzarias in Brooksdale"
-00:00:26 - 00:00:28	"So NOBODY"
-00:00:28 - 00:00:29	"Will eat PIZZA"
-00:00:29 - 00:00:30	"EVER"
-00:00:30 - 00:00:31	"AGAIN"
+00:00:00---00:00:08_[Outside Noise]
+00:00:08---00:00:13_[Indoor Chatting]
+00:00:13---00:00:15_[Door Slam]
+00:00:15---00:00:21_"Your time is up, Giuseppe. We're shutting your place down!"
+00:00:21---00:00:27_"The Boss says that we gotta shut down ALL the Pizzarias in Brooksdale"
+00:00:27---00:00:29_"So NOBODY"
+00:00:29---00:00:30_"Will eat PIZZA"
+00:00:30---00:00:31_"EVER"
+00:00:31---00:00:32_"AGAIN"
