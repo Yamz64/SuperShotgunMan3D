@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wind_Tunnel : MonoBehaviour
+public class Wind_Tunnel_Point : MonoBehaviour
 {
     public float wind_force;                //Force that the tunnel pulls with
 
