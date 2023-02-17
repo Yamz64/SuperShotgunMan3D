@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float viewbob_amplitude, viewbob_frequency, cam_roll_amount;
     public float shotgun_frequency, shotgun_amplitude, shotgun_sway_x;
+    public float corpse_sway_x, corpse_amplitude;
     public float death_cam_interp;
 
     private bool noclip;
@@ -46,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
 
     private bool dead, punching, started_respawn;
 
+    private GameObject throwable_visual;
+
     private Animator anim, r_anim, p_anim;
 
     private Transform cam_transform;
@@ -54,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 slide_vector;
     private Vector3 cam_pivot;
     private Vector3 active_checkpoint;
+    private Vector3 starting_throwable_pos;
 
     private PlayerStats stats;
 
@@ -458,6 +462,29 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void AnimateHeldCorpse() {
+        if (!stats.HasCorpse)
+        {
+            throwable_visual.GetComponent<MeshRenderer>().enabled = false;
+            return;
+        }
+        throwable_visual.GetComponent<MeshRenderer>().enabled = true;
+
+        //Handle basic viewbobbing
+        float move_velocity = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z).magnitude;
+        float x_lerp = 2.0f * Mathf.Abs((animation_tick - 0.5f) / shotgun_frequency - Mathf.Floor((animation_tick - 0.5f) / shotgun_frequency + 0.5f));
+        float x_pos = Mathf.Lerp(corpse_sway_x, -corpse_sway_x, x_lerp);
+        x_pos += starting_throwable_pos.x;
+        x_pos = Mathf.Lerp(starting_throwable_pos.x, x_pos, move_velocity / _movespeed);
+
+        float PI = Mathf.PI;
+        float y_lerp = Mathf.Abs(Mathf.Sin((PI * animation_tick) / (0.5f * shotgun_frequency) - (PI / (shotgun_frequency))));
+        float y_pos = Mathf.Lerp(starting_throwable_pos.y, corpse_amplitude + starting_throwable_pos.y, y_lerp);
+        y_pos += starting_throwable_pos.y;
+        y_pos = Mathf.Lerp(starting_throwable_pos.y, y_pos, move_velocity / _movespeed);
+        throwable_visual.transform.localPosition = new Vector3(x_pos, y_pos, starting_throwable_pos.z);
+    }
+
     bool CheckGrounded()
     {
         Vector3 crouch_offset = Vector3.zero;
@@ -758,6 +785,9 @@ public class PlayerMovement : MonoBehaviour
 
         p_menu = GetComponent<PauseMenuBehavior>();
 
+        throwable_visual = transform.GetChild(0).GetChild(0).gameObject;
+        starting_throwable_pos = throwable_visual.transform.localPosition;
+
         col.material.dynamicFriction = 500.0f;
         col.material.dynamicFriction = 0.0f;
     }
@@ -781,6 +811,7 @@ public class PlayerMovement : MonoBehaviour
         Look();
         CheckInteractable();
         AnimateShotgun();
+        AnimateHeldCorpse();
 
         if (!noclip)
         {

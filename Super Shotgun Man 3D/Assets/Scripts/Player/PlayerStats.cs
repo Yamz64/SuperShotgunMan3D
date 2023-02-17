@@ -7,8 +7,8 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private bool has_shotgun, already_dead;
-    private bool explosive_shells, invincible, fade_direction, finished_fade, timer_go;
-    private int hp, ap, shells;
+    private bool explosive_shells, invincible, fade_direction, finished_fade, timer_go, has_corpse;
+    private int hp, ap, shells, corpse_index;
     private float announce_text_fade, powerup_time, powerup_timer_max, time;
     [SerializeField]
     private float announce_text_fade_increment, knockback_resistance, damage_vignette_increment, fade_vignette_increment;
@@ -20,6 +20,7 @@ public class PlayerStats : MonoBehaviour
     private Sprite powerup_sprite;
     private GameObject last_damage_dealer;
     private PlayerDamagingFieldBehavior field;
+    private Texture2DArray corpse_spritesheet;
     public FaceBehavior face;
 
     public bool HasShotgun
@@ -28,6 +29,15 @@ public class PlayerStats : MonoBehaviour
         set
         {
             has_shotgun = value;
+        }
+    }
+
+    public bool HasCorpse
+    {
+        get { return has_corpse; }
+        set
+        {
+            has_corpse = value;
         }
     }
 
@@ -110,6 +120,12 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    public int CorpseIndex
+    {
+        get { return corpse_index; }
+        set { corpse_index = value; }
+    }
+
     public float PowerupTime
     {
         get { return powerup_time; }
@@ -148,6 +164,15 @@ public class PlayerStats : MonoBehaviour
         set
         {
             last_damage_dealer = value;
+        }
+    }
+
+    public Texture2DArray CorpseSpriteSheet
+    {
+        get { return corpse_spritesheet; }
+        set
+        {
+            corpse_spritesheet = value;
         }
     }
 
