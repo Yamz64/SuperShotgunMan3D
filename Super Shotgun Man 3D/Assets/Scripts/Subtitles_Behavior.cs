@@ -12,9 +12,11 @@ public class Subtitles_Behavior : MonoBehaviour
 
     public string cutscene_name;    //Name of the cutscene the subtitles need to sync with
 
+    public bool cutscene;                  //Whether the subtitles are shown in a cutscene
+
     List<string> script;            //Container to hold the text
 
-    float timer;
+    float timer;                    //Used to track current time in cutscene
 
 
     void Awake()
@@ -30,26 +32,28 @@ public class Subtitles_Behavior : MonoBehaviour
         script = new List<string>();
         StreamReader input_stream;
 
-        Debug.Log("Cutscene name == " + cutscene_name);
-
-        //Grab the subtitles from the relevant file in Resources depending on the scene
-        switch (cutscene_name)
+        if (cutscene)
         {
-            case ("Opening"):
-                input_stream = new StreamReader("Assets/Resources/Subtitle_Text/Cutscenes/OpeningCutscene.txt");
-                break;
-            default:
-                input_stream = new StreamReader("Assets/Resources/Subtitle_Text/Cutscenes/OpeningCutscene.txt");
-                break;
-        }
-        //Read each line into the subtitles list
-        while (!input_stream.EndOfStream)
-        {
-            string input_line = input_stream.ReadLine();
-            script.Add(input_line);
-        }
+            //Grab the subtitles from the relevant file in Resources depending on the scene
+            switch (cutscene_name)
+            {
+                case ("Opening"):
+                    input_stream = new StreamReader("Assets/Resources/Subtitle_Text/Cutscenes/OpeningCutscene.txt");
+                    break;
+                default:
+                    input_stream = new StreamReader("");
+                    break;
+            }
 
-        input_stream.Close();
+            //Read each line into the subtitles list
+            while (!input_stream.EndOfStream)
+            {
+                string input_line = input_stream.ReadLine();
+                script.Add(input_line);
+            }
+
+            input_stream.Close();
+        }
 
         //On = Subtitles display, Off = They don't
         string option = PlayerPrefs.GetString("Subtitles", "Off");
@@ -62,8 +66,9 @@ public class Subtitles_Behavior : MonoBehaviour
     }
 
     //Display each line in the subtitle script, with text changes at predetermined points
+    //Read from file defined in start/awake function
     //Used for cutscenes
-    IEnumerator displaySubtitles()
+    public IEnumerator displaySubtitles()
     {
         sub_text.gameObject.SetActive(true);
         //text_background.gameObject.SetActive(true);
@@ -110,11 +115,25 @@ public class Subtitles_Behavior : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
     }
 
+    //Overload version, display input text for input time
+    public IEnumerator displaySubtitles(float time, string text)
+    {
+        sub_text.gameObject.SetActive(true);
+        sub_text.text = text;
+        Debug.Log("Time == " + time);
+        yield return new WaitForSeconds(time);
+        Debug.Log("Turning text off");
+        sub_text.text = "";
+        Debug.Log("Text has been turned off");
+        yield return new WaitForSeconds(0.1f);
+        sub_text.gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
         //Display current time for subtitle testing
         timer += Time.deltaTime;
-        Debug.Log(timer);
+        //Debug.Log(timer);
     }
 }

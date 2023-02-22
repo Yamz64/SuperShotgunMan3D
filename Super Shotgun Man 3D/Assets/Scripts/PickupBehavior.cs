@@ -17,7 +17,15 @@ public class PickupBehavior : MonoBehaviour
     void PlayPickupShotgunSound()
     {
         if (SceneManager.GetActiveScene().name == "Level1")
+        {
             AudioUtils.InstanceVoice(0, transform.position, this);
+            string option = PlayerPrefs.GetString("Subtitles", "Off");
+            if (option.Equals("On"))
+            { 
+                //GameObject subtitles = GameObject.FindGameObjectWithTag("Subtitle");
+                //StartCoroutine(subtitles.GetComponent<Subtitles_Behavior>().displaySubtitles(3.0f, "[Shotgun Cocks]" + System.Environment.NewLine + "Uhhh...I'll call you Margherit."));
+            }
+        }
         else
             AudioUtils.InstanceVoice(1, transform.position, this);
     }
