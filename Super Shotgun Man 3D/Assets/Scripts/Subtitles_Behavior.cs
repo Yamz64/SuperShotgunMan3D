@@ -18,6 +18,8 @@ public class Subtitles_Behavior : MonoBehaviour
 
     float timer;                    //Used to track current time in cutscene
 
+    float in_game_timer;            //Used to track time spent displaying in game subtitles
+
 
     void Awake()
     {
@@ -115,16 +117,14 @@ public class Subtitles_Behavior : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
     }
 
-    //Overload version, display input text for input time
+    //Overload version, display input text for input time, used for in-game stuff
     public IEnumerator displaySubtitles(float time, string text)
     {
+        in_game_timer = time;
         sub_text.gameObject.SetActive(true);
         sub_text.text = text;
-        Debug.Log("Time == " + time);
         yield return new WaitForSeconds(time);
-        Debug.Log("Turning text off");
         sub_text.text = "";
-        Debug.Log("Text has been turned off");
         yield return new WaitForSeconds(0.1f);
         sub_text.gameObject.SetActive(false);
     }
@@ -134,6 +134,14 @@ public class Subtitles_Behavior : MonoBehaviour
     {
         //Display current time for subtitle testing
         timer += Time.deltaTime;
-        //Debug.Log(timer);
+
+        //Check behavior for subtitle timer in game, and cut subtitles if the coroutine doesn't
+        if (in_game_timer > 0) in_game_timer -= Time.deltaTime;
+        if (in_game_timer <= 0)
+        {
+            StopCoroutine("displaySubtitles");
+            sub_text.text = "";
+            sub_text.gameObject.SetActive(false);
+        }
     }
 }
