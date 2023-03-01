@@ -65,6 +65,10 @@ public class Subtitles_Behavior : MonoBehaviour
         {
             StartCoroutine(displaySubtitles());
         }
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Equals("Level1"))
+        {
+            StartCoroutine(displaySubtitles(6.0f, "WHAT, NO PIZZA?! WHAT DO YOU THINK THIS IS, CANADA?!!!"));
+        }
     }
 
     //Display each line in the subtitle script, with text changes at predetermined points
@@ -129,6 +133,15 @@ public class Subtitles_Behavior : MonoBehaviour
         sub_text.gameObject.SetActive(false);
     }
 
+
+    //Stop any subtitles currently being displayed to prevent overlap
+    public void subtitleCutOff()
+    {
+        StopCoroutine("displaySubtitles");
+        sub_text.text = "";
+        sub_text.gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -139,9 +152,7 @@ public class Subtitles_Behavior : MonoBehaviour
         if (in_game_timer > 0) in_game_timer -= Time.deltaTime;
         if (in_game_timer <= 0)
         {
-            StopCoroutine("displaySubtitles");
-            sub_text.text = "";
-            sub_text.gameObject.SetActive(false);
+            subtitleCutOff();
         }
     }
 }
