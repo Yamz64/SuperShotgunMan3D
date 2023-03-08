@@ -21,26 +21,29 @@ public class Wind_Tunnel_Point : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb == null)
-            return;
 
+        //Return if no rigid body to affect
+        if (rb == null) return;
+
+        //Add force to object in the specified direction
         rb.AddForce(wind_direction * wind_force);
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-            float max = player_speed.magnitude;//Math.Max(player_speed.x, Math.Max(player_speed.y, player_speed.z));
+            //Get player speed amount
+            float max = player_speed.magnitude;
+
+            //Multiply by wind direction (only applies force in direction of tunnel)
             Vector3 temp = wind_direction * max;
+
+            //Add to the object's velocity
             other.gameObject.GetComponent<Rigidbody>().velocity += temp;
+
+            //Reset the speed var for next pass
             player_speed.Set(0,0,0);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
