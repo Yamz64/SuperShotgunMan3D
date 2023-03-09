@@ -5864,6 +5864,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 4372893700339964629}
     m_Modifications:
     - target: {fileID: 9002316849856996492, guid: 039c3e578303f104bb6bd9d8f7798b53, type: 3}
+      propertyPath: m_text
+      value: '-'
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002316849856996492, guid: 039c3e578303f104bb6bd9d8f7798b53, type: 3}
       propertyPath: m_fontSize
       value: 72
       objectReference: {fileID: 0}

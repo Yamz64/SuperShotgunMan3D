@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -92,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
     {
         active_checkpoint = position;
         has_checkpoint = true;
+        StartCoroutine(Announcement("Checkpoint Set"));
     }
 
     public void AddPunched(GameObject other) { punched_enemies.Add(other); }
@@ -181,6 +183,23 @@ public class PlayerMovement : MonoBehaviour
             dead = false;
             started_respawn = false;
             stats.AlreadyDead = false;
+        }
+    }
+
+    IEnumerator Announcement(string text = "", bool immediate = false)
+    {
+        //Display text in announce UI
+        stats.AnnounceText = text;
+
+        //If text needs to disappear in a short time frame independent of normal fading
+        if (immediate)
+        {
+            yield return new WaitForSeconds(3.0f);
+            stats.AnnounceText = "";
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.0f);
         }
     }
 
@@ -798,6 +817,7 @@ public class PlayerMovement : MonoBehaviour
         //don't do anything if you die
         if (stats.HP <= 0)
         {
+            StopCoroutine("Announcement");
             stats.AnnounceText = "Press 'ESC' to close the game, press any other key to respawn at last checkpoint";
             DeathCam();
             DeathLogic();
