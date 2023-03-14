@@ -15,7 +15,9 @@ public class Wind_Tunnel_Point : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-           player_speed = other.gameObject.GetComponent<Rigidbody>().velocity;
+            Debug.Log("Player speed before == " + player_speed);
+            player_speed = other.GetComponent<Rigidbody>().velocity;
+            Debug.Log("Player speed now == " + player_speed);
         }
     }
     private void OnTriggerStay(Collider other)
@@ -39,7 +41,11 @@ public class Wind_Tunnel_Point : MonoBehaviour
             Vector3 temp = wind_direction * max;
 
             //Add to the object's velocity
-            other.gameObject.GetComponent<Rigidbody>().velocity += temp;
+            other.GetComponent<Rigidbody>().velocity += temp;
+
+            Debug.Log("Speed val == " + player_speed);
+            Debug.Log("Wind Addition == " + temp);
+            Debug.Log("Player velocity now == " + other.GetComponent<Rigidbody>().velocity);
 
             //Reset the speed var for next pass
             player_speed.Set(0,0,0);
