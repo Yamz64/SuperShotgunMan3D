@@ -11,6 +11,8 @@ public class Wind_Tunnel_Point : MonoBehaviour
 
     public Vector3 player_speed;            //Speed of the player before entering the tunnel
 
+    public bool pizza;                      //Bool to say if this is a pizza lined tunnel
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag.Equals("Player"))
@@ -18,6 +20,11 @@ public class Wind_Tunnel_Point : MonoBehaviour
             Debug.Log("Player speed before == " + player_speed);
             player_speed = other.GetComponent<Rigidbody>().velocity;
             Debug.Log("Player speed now == " + player_speed);
+            if (pizza)
+            {
+                //Do Pizza Lined tunnel stuff (death or damage)
+                pizzaBehavior();
+            }
         }
     }
     private void OnTriggerStay(Collider other)
@@ -50,6 +57,12 @@ public class Wind_Tunnel_Point : MonoBehaviour
             //Reset the speed var for next pass
             player_speed.Set(0,0,0);
         }
+    }
+
+    void pizzaBehavior()
+    {
+        player_speed.Set(0, 0, 0);
+        //Player death/damage
     }
 
     // Update is called once per frame
