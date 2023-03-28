@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5660145580227645872}
   m_Layer: 0
   m_Name: Pizza_Blob_Drop
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,3 +128,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
+  goop: {fileID: 8455620689842980247, guid: 7b3c9fcf4111cf249a1ffa49a02f4328, type: 3}

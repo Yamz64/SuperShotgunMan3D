@@ -8,6 +8,9 @@ public class Pizza_Goop : MonoBehaviour
     public float delay;         //The time between each bit of damage the player takes (either small/continuous or large and spaced out)
     public float current;
 
+    public float lifetime = -10.0f;
+    public float age;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag.Equals("Player"))
@@ -31,11 +34,22 @@ public class Pizza_Goop : MonoBehaviour
     void Start()
     {
         current = delay;
+        age = lifetime;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (lifetime != -10.0f)
+        {
+            if (age > 0)
+            {
+                age -= Time.deltaTime;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
 }
