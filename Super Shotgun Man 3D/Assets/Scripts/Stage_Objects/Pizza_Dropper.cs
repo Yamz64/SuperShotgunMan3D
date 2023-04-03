@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pizza_Dropper : MonoBehaviour
 {
     public float delay;                     //Delay between dropping each blob
-    public float current;
+    public float current;                   //Time until delay is reached to do damage
     public GameObject blob;                 //Pizza blob object to drop
 
     //Drops a Pizza blob 1 unit below the dropper

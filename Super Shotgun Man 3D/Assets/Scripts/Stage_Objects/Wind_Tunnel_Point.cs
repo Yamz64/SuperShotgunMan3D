@@ -9,7 +9,7 @@ public class Wind_Tunnel_Point : MonoBehaviour
 
     public Vector3 wind_direction;          //Direction this point in the wind tunnel pushes in
 
-    public Vector3 player_speed;            //Speed of the player before entering the tunnel
+    private Vector3 player_speed;           //Speed of the player before entering the tunnel
 
     public bool pizza;                      //Bool to say if this is a pizza lined tunnel
 
@@ -17,9 +17,7 @@ public class Wind_Tunnel_Point : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("Player"))
         {
-            Debug.Log("Player speed before == " + player_speed);
             player_speed = other.GetComponent<Rigidbody>().velocity;
-            Debug.Log("Player speed now == " + player_speed);
             if (pizza)
             {
                 //Do Pizza Lined tunnel stuff (death or damage)
@@ -50,10 +48,6 @@ public class Wind_Tunnel_Point : MonoBehaviour
             //Add to the object's velocity
             other.GetComponent<Rigidbody>().velocity += temp;
 
-            Debug.Log("Speed val == " + player_speed);
-            Debug.Log("Wind Addition == " + temp);
-            Debug.Log("Player velocity now == " + other.GetComponent<Rigidbody>().velocity);
-
             //Reset the speed var for next pass
             player_speed.Set(0,0,0);
         }
@@ -61,13 +55,7 @@ public class Wind_Tunnel_Point : MonoBehaviour
 
     void pizzaBehavior()
     {
-        player_speed.Set(0, 0, 0);
+        //player_speed.Set(0, 0, 0);
         //Player death/damage
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

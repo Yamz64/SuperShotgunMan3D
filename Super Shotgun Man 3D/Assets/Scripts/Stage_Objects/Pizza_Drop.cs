@@ -23,6 +23,7 @@ public class Pizza_Drop : MonoBehaviour
 
     public void spawnGoop()
     {
+        //Spawn goop and set the active time
         GameObject splatter = Instantiate(goop, this.transform.position, this.transform.rotation);
         splatter.GetComponent<Pizza_Goop>().lifetime = 1.0f;
     }
