@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Water_Slide : MonoBehaviour
 {
-    public float speed_factor;
-    public List<Transform> points;
-
+    public float speed_factor;          //How fast to push the player
+    public List<Transform> points;      //The list of points to push the player along
+    
+    //Check if C is between A and B
     bool IsBetweenAB(Vector3 A, Vector3 B, Vector3 C)
     {
         return Vector3.Dot((B - A).normalized, (C - B).normalized) < 0f && Vector3.Dot((A - B).normalized, (C - A).normalized) < 0f;
@@ -14,16 +15,21 @@ public class Water_Slide : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        //If player, push them to next point
         if (collision.gameObject.tag.Equals("Player"))
         {
             for (int x = 0; x < points.Count-1; x++)
             {
+                //If between 2 points, move towards second point
                 if (IsBetweenAB(points[x].position, points[x + 1].position, collision.transform.position))
                 {
-                    collision.gameObject.GetComponent<Rigidbody>().AddForce(points[x + 1].position * speed_factor);
+                    Debug.Log("Between points " + x + " and " + (x + 1));
+                    collision.gameObject.GetComponent<Rigidbody>().AddForce((points[x + 1].position - collision.gameObject.transform.position).normalized * speed_factor);
                     break;
                 }
             }
+            //Otherwise, add force towards end point
+            collision.gameObject.GetComponent<Rigidbody>().AddForce((points[points.Count - 1].position - collision.gameObject.transform.position).normalized * speed_factor);
         }
     }
 
