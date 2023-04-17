@@ -18,13 +18,13 @@ public class Water_Slide : MonoBehaviour
         //If player, push them to next point
         if (collision.gameObject.tag.Equals("Player"))
         {
-            for (int x = 0; x < points.Count-1; x++)
+            for (int x = 0; x < points.Count-2; x++)
             {
                 //If between 2 points, move towards second point
                 if (IsBetweenAB(points[x].position, points[x + 1].position, collision.transform.position))
                 {
                     Debug.Log("Between points " + x + " and " + (x + 1));
-                    collision.gameObject.GetComponent<Rigidbody>().AddForce((points[x + 1].position - collision.gameObject.transform.position).normalized * speed_factor);
+                    collision.gameObject.GetComponent<Rigidbody>().AddForce((points[x + 1].position - collision.gameObject.transform.position).normalized * (speed_factor * 0.5f));
                     break;
                 }
             }
