@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Pizza_Goop : MonoBehaviour
 {
-    public int damage;          //The damage the player will take when in the goop
-    public float delay;         //The time between each bit of damage the player takes (either small/continuous or large and spaced out)
-    public float current;       //The current time until the delay is reached for damage
+    public int damage;                  //The damage the player will take when in the goop
+    public float delay;                 //The time between each bit of damage the player takes (either small/continuous or large and spaced out)
+    public float current;               //The current time until the delay is reached for damage
 
     public float lifetime = -10.0f;     //The amount of time the goop should stay active
     public float age;                   //The current time until the lifetime limit is reached

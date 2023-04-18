@@ -27,6 +27,10 @@ public class Tractor_Beam : MonoBehaviour
         {
             other.gameObject.GetComponent<BaseEnemyBehavior>().TakeDamage(other.gameObject.GetComponent<BaseEnemyBehavior>().HP);
         }
+        else if (other.gameObject.tag.Equals("Player"))
+        {
+            other.gameObject.GetComponent<PlayerMovement>()._movespeed = other.gameObject.GetComponent<PlayerMovement>()._movespeed / 2;
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -49,6 +53,7 @@ public class Tractor_Beam : MonoBehaviour
         if (other.gameObject.tag.Equals("Player"))
         {
             other.gameObject.GetComponent<Rigidbody>().useGravity = true;
+            other.gameObject.GetComponent<PlayerMovement>()._movespeed = other.gameObject.GetComponent<PlayerMovement>()._movespeed * 2;
         }
     }
 

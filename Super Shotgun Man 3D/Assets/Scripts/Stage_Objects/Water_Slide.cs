@@ -20,28 +20,15 @@ public class Water_Slide : MonoBehaviour
         {
             for (int x = 0; x < points.Count-2; x++)
             {
-                //If between 2 points, move towards second point
+                //If between 2 points, move towards second point (with half the speed force)
                 if (IsBetweenAB(points[x].position, points[x + 1].position, collision.transform.position))
                 {
-                    Debug.Log("Between points " + x + " and " + (x + 1));
                     collision.gameObject.GetComponent<Rigidbody>().AddForce((points[x + 1].position - collision.gameObject.transform.position).normalized * (speed_factor * 0.5f));
                     break;
                 }
             }
-            //Otherwise, add force towards end point
+            //Otherwise, add force (full speed factor) towards end point
             collision.gameObject.GetComponent<Rigidbody>().AddForce((points[points.Count - 1].position - collision.gameObject.transform.position).normalized * speed_factor);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
